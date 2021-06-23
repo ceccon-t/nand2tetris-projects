@@ -8,7 +8,7 @@ DMux V
 Not16 V
 And16 V
 Or16 V
-Mux16 
+Mux16 V
 Or8Way 
 Mux4Way16 
 Mux8Way16 
