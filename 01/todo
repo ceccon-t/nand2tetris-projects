@@ -6,7 +6,7 @@ Xor V
 Mux  V
 DMux V
 Not16 V
-And16 
+And16 V
 Or16 
 Mux16 
 Or8Way 
