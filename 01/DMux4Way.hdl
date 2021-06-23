@@ -17,4 +17,24 @@ CHIP DMux4Way {
 
     PARTS:
     // Put your code here:
+    // Aux variables "invertedSel0" and "invertedSel1"
+    Not(in=sel[0],out=invertedSel0);
+    Not(in=sel[1],out=invertedSel1);
+
+    // For each output channel, calculate if it was selected
+    // Possibilities:
+    // sel == 00, selected channel was a 
+    // sel == 01, selected channel was b 
+    // sel == 10, selected channel was c 
+    // sel == 11, selected channel was d 
+    And(a=invertedSel1,b=invertedSel0,out=enabledA);
+    And(a=invertedSel1,b=sel[0],out=enabledB);
+    And(a=sel[1],b=invertedSel0,out=enabledC);
+    And(a=sel[1],b=sel[0],out=enabledD);
+
+    // "Opens for writing" only the selected channel
+    And(a=enabledA,b=in,out=a);
+    And(a=enabledB,b=in,out=b);
+    And(a=enabledC,b=in,out=c);
+    And(a=enabledD,b=in,out=d);
 }
