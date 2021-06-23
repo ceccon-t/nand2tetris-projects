@@ -1,15 +1,15 @@
-Nand  V
-Not  V
-And  V
-Or  V
+Nand V
+Not V
+And V
+Or V
 Xor V
-Mux  V
+Mux V
 DMux V
 Not16 V
 And16 V
 Or16 V
 Mux16 V
-Or8Way 
+Or8Way V
 Mux4Way16 
 Mux8Way16 
 DMux4Way 
