@@ -17,4 +17,37 @@ CHIP DMux8Way {
 
     PARTS:
     // Put your code here:
+    // Aux variables "invertedSel0", "invertedSel1" and "invertedSel2"
+    Not(in=sel[0],out=invertedSel0);
+    Not(in=sel[1],out=invertedSel1);
+    Not(in=sel[2],out=invertedSel2);
+
+    // For each output channel, calculate if it was selected
+    // Possibilities:
+    // sel == 000, selected channel was a 
+    // sel == 001, selected channel was b 
+    // sel == 010, selected channel was c 
+    // sel == 011, selected channel was d 
+    // sel == 100, selected channel was e 
+    // sel == 101, selected channel was f 
+    // sel == 110, selected channel was g 
+    // sel == 111, selected channel was h 
+    And3(a=invertedSel2,b=invertedSel1,c=invertedSel0,out=enabledA);
+    And3(a=invertedSel2,b=invertedSel1,c=sel[0],out=enabledB);
+    And3(a=invertedSel2,b=sel[1],c=invertedSel0,out=enabledC);
+    And3(a=invertedSel2,b=sel[1],c=sel[0],out=enabledD);
+    And3(a=sel[2],b=invertedSel1,c=invertedSel0,out=enabledE);
+    And3(a=sel[2],b=invertedSel1,c=sel[0],out=enabledF);
+    And3(a=sel[2],b=sel[1],c=invertedSel0,out=enabledG);
+    And3(a=sel[2],b=sel[1],c=sel[0],out=enabledH);
+
+    // "Opens for writing" only the selected channel 
+    And(a=enabledA,b=in,out=a);
+    And(a=enabledB,b=in,out=b);
+    And(a=enabledC,b=in,out=c);
+    And(a=enabledD,b=in,out=d);
+    And(a=enabledE,b=in,out=e);
+    And(a=enabledF,b=in,out=f);
+    And(a=enabledG,b=in,out=g);
+    And(a=enabledH,b=in,out=h);
 }
