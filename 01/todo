@@ -10,7 +10,7 @@ And16 V
 Or16 V
 Mux16 V
 Or8Way V
-Mux4Way16 
+Mux4Way16 V
 Mux8Way16 
 DMux4Way 
 DMux8Way 
