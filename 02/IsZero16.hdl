@@ -1,0 +1,77 @@
+/**
+ * Check if 16-bit number is zero:
+ * out = a == 0000000000000000 
+ */
+
+CHIP IsZero16 {
+    IN a[16];
+    OUT out;
+
+    PARTS:
+   // Put you code here:
+   
+   // a[0]
+   Not(in=a[0],out=ni0);
+   And(a=ni0,b=true,out=r1);
+
+   // a[1]
+   Not(in=a[1],out=ni1);
+   And(a=ni1,b=r1,out=r2);
+
+   // a[2]
+   Not(in=a[2],out=ni2);
+   And(a=ni2,b=r2,out=r3);
+
+   // a[3]
+   Not(in=a[3],out=ni3);
+   And(a=ni3,b=r3,out=r4);
+
+   // a[4]
+   Not(in=a[4],out=ni4);
+   And(a=ni4,b=r4,out=r5);
+
+   // a[5]
+   Not(in=a[5],out=ni5);
+   And(a=ni5,b=r5,out=r6);
+
+   // a[6]
+   Not(in=a[6],out=ni6);
+   And(a=ni6,b=r6,out=r7);
+
+   // a[7]
+   Not(in=a[7],out=ni7);
+   And(a=ni7,b=r7,out=r8);
+
+   // a[8]
+   Not(in=a[8],out=ni8);
+   And(a=ni8,b=r8,out=r9);
+
+   // a[9]
+   Not(in=a[9],out=ni9);
+   And(a=ni9,b=r9,out=r10);
+
+   // a[10]
+   Not(in=a[10],out=ni10);
+   And(a=ni10,b=r10,out=r11);
+
+   // a[11]
+   Not(in=a[11],out=ni11);
+   And(a=ni11,b=r11,out=r12);
+
+   // a[12]
+   Not(in=a[12],out=ni12);
+   And(a=ni12,b=r12,out=r13);
+
+   // a[13]
+   Not(in=a[13],out=ni13);
+   And(a=ni13,b=r13,out=r14);
+
+   // a[14]
+   Not(in=a[14],out=ni14);
+   And(a=ni14,b=r14,out=r15);
+
+   // a[15]
+   Not(in=a[15],out=ni15);
+   And(a=ni15,b=r15,out=out);
+
+}

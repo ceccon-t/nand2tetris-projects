@@ -1,0 +1,14 @@
+/**
+ * Check if 16-bit number is negative:
+ * out = a < 0dec 
+ */
+
+CHIP IsNegative16 {
+    IN a[16];
+    OUT out;
+
+    PARTS:
+   // Put you code here:
+   
+   And(a=a[15],b=true,out=out);
+}

@@ -43,4 +43,45 @@ CHIP ALU {
 
     PARTS:
    // Put you code here:
+
+   // Aux variables
+   // stage1 (zx, x or zero, yields partialX)
+   Mux16(a=x,b=false,sel=zx,out=partialX);
+   // !x
+   Not16(in=partialX,out=notPartialX);
+
+   // stage2 (nx, x or negatedX, yields finalX)
+   Mux16(a=partialX, b=notPartialX, sel=nx, out=finalX);
+
+   // stage3 (zy, y or zero, yields partialY)
+   Mux16(a=y, b=false, sel=zy, out=partialY);
+   // !y
+   Not16(in=partialY,out=notPartialY);
+
+   // stage4 (ny, y or negatedY, yields finalY)
+   Mux16(a=partialY, b=notPartialY, sel=ny, out=finalY);
+
+   // x AND y 
+   And16(a=finalX,b=finalY,out=xANDy);
+   // x PLUS y 
+   Add16(a=finalX,b=finalY,out=xPLUSy);
+
+   // stage5 (f, xANDy or xPLUSy, yields partialOut)
+   Mux16(a=xANDy,b=xPLUSy,sel=f,out=partialOut);
+
+   // !partialOut 
+   Not16(in=partialOut,out=notPartialOut);
+
+   // stage6 (no, partialOut or notPartialOut, yields finalResult)
+   Mux16(a=partialOut,b=notPartialOut,sel=no,out=finalResult);
+
+   // status zr
+   IsZero16(a=finalResult, out=zr);
+
+   // status ng 
+   IsNegative16(a=finalResult,out=ng);
+
+   // out 
+   Or16(a=finalResult,b=false,out=out);
+
 }
