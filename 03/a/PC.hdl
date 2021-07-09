@@ -17,4 +17,20 @@ CHIP PC {
 
     PARTS:
     // Put your code here:
+
+    Register(in=regIn,load=true,out=outReg);
+    Inc16(in=outReg,out=incrementedReg);
+
+    // Doing the if chain backwards:
+    // first part: increment or keep current?
+    Mux16(a=outReg,b=incrementedReg,sel=inc,out=incOrCur);
+
+    // second part: load new or keep previous result?
+    Mux16(a=incOrCur,b=in,sel=load,out=loadOrKeep);
+
+    // final part: reset or keep previous result?
+    Mux16(a=loadOrKeep,b=false,sel=reset,out=regIn);
+
+    // Propagate output from register to output of chip
+    And16(a=outReg, b=true, out=out);
 }
