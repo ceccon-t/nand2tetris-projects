@@ -47,15 +47,33 @@
 
 // ====================================
 // Handle key press 
-// Paint screen 
+// STRATEGY 1: write a random value to memory (to debug identifying-key-press logic)
+(HANDLESTR1PRESSING)
+    @42
+    D=A 
+    @HANDLESTR1BACK 
+    0;JMP
+(HANDLESTR1NOTPRESSING)
+    @19
+    D=A 
+    @HANDLESTR1BACK 
+    0;JMP
+(HANDLESTR1BACK)
+    @R0 
+    M=D
+    @LOOP 
+    0;JMP
+
+
+// STRATEGY 2 (official): paint screen 
 (PRESSING)
     @fill
-    M=-1        // fill screen memory map with '1111111111111111' words
+    M=-1 
     @FILLNEXT 
     0;JMP
 (NOTPRESSING)
     @fill
-    M=0         // fill screen memory map with '0000000000000000' words
+    M=0  
     @FILLNEXT 
     0;JMP
 (FILLNEXT)
@@ -63,8 +81,8 @@
     @fill 
     D=M
     @pos_screen
-    A=M         // because 'pos_screen' is a pointer
-    M=D         // do the actual filing
+    A=M
+    M=D
 
     // check if end of screen 
     @pos_screen
