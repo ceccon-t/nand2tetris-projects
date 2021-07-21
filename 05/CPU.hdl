@@ -40,4 +40,71 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
+
+    // Aux
+    // instruction type
+    Not(in=instruction[15],out=isTypeA);
+    Not(in=isTypeA,out=isTypeC);
+
+    // Mux16 (before AReg)
+    Mux16(a=aluOut,b=instruction,sel=isTypeA,out=outM16AReg);
+
+    // Mux16 (before ALU)
+    Mux16(a=aRegOut,b=inM,sel=instruction[12],out=outM16ALU);
+
+    // A-Register
+    Or(a=isTypeA,b=instruction[5],out=loadA); // either A-inst or 'd1' (instruction[5]) bit is on 
+    ARegister(in=outM16AReg,load=loadA,out=aRegOut);
+
+    // D-Register
+    And(a=isTypeC,b=instruction[4],out=loadD); // is C-inst AND 'd2' (instruction[4]) bit is on
+    DRegister(in=aluOut,load=loadD,out=dRegOut);
+
+
+    // ALU 
+    // zx=c1
+    // nx=c2
+    // zy=c3 
+    // ny=c4 
+    // f=c5
+    // no=c6
+    ALU(x=dRegOut,y=outM16ALU,zx=instruction[11],nx=instruction[10],zy=instruction[9],ny=instruction[8],f=instruction[7],no=instruction[6],out=aluOut,zr=aluZero,ng=aluNegative);
+
+
+    // Jump logic based on ALU result and instruction
+    // aux: willJump
+    // generate temp variable for case of alu result positive
+    Not(in=aluZero,out=notAluZero);
+    Not(in=aluNegative,out=notAluNegative);
+    And(a=notAluZero,b=notAluNegative,out=aluPositive);
+
+    // check alu result with jump cases
+    And(a=aluNegative,b=instruction[2],out=lZero); // bit j1
+    And(a=aluZero,b=instruction[1],out=eqZero); // bit j2
+    And(a=aluPositive,b=instruction[0],out=gZero); // bit j3
+
+    // aggregate results of checks
+    Or(a=gZero,b=eqZero,out=geZero);
+    Or(a=geZero,b=lZero,out=shouldJump);
+
+    // jump only if is C-instruction
+    And(a=isTypeC,b=shouldJump,out=willJump);
+
+    // PC
+    // generate temp variable to increment if not jumping
+    Not(in=willJump,out=wontJump);
+    PC(in=aRegOut,load=willJump,inc=wontJump,reset=reset,out=outPc);
+
+    // adjust pc output to API size
+    Filter16To15(in=outPc,out=pc);
+
+    // output: outM 
+    And16(a=aluOut,b=true,out=outM);
+
+    // output: writeM 
+    And(a=isTypeC,b=instruction[3],out=writeM);
+
+    // output: addressM
+    Filter16To15(in=aRegOut,out=addressM);
+
 }
