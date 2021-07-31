@@ -1,3 +1,5 @@
+from instruction_types import A_Type, C_Type
+
 def remove_whitespace(instruction: str):
     return instruction.strip()
 
@@ -33,6 +35,15 @@ def contains_symbol(inst: str) -> bool:
 
 def get_symbol_from_A_type(inst: str) -> str:
     return inst[1:]
+
+
+def get_typed_inst(inst: str) -> 'Instruction':
+    if is_A_type(inst):
+        return A_Type(inst)
+    else:
+        return C_Type(inst)
+
+
 
 
 if __name__ == '__main__':
