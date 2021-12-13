@@ -1,0 +1,3 @@
+#!/bin/bash
+VM_TRANSLATOR_FOLDER=<add_folder_here>
+java -cp $VM_TRANSLATOR_FOLDER VMTranslator $1
