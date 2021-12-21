@@ -40,7 +40,17 @@ class VMTranslator {
 
         String targetFile = generateTargetFilename(source);
 
-        System.out.println("\nTarget file for translation is " + targetFile);
+        System.out.println("\nTarget file for translation is " + targetFile + "\n");
+        CodeWriter writer = new CodeWriter(targetFile);
+
+        for (String filepath: toProcess) { 
+            System.out.println("Translating file " + filepath + "...");
+            Parser currentParser = new Parser(filepath);
+
+            writer.setFileName(getActualFilename(filepath));
+        }
+
+        writer.close();
 
     }
 
@@ -77,6 +87,15 @@ class VMTranslator {
         }
 
         return path;
+    }
+
+    private static String getActualFilename(String path) {
+        String actual = path;
+        if (actual.contains("/")) {
+            int lastIndex = actual.lastIndexOf("/");
+            actual = path.substring(lastIndex+1);
+        }
+        return actual;
     }
 
 }
