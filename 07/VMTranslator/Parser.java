@@ -34,20 +34,21 @@ public class Parser {
         String newCommand = allCommands.get(currentCommand);
 
         // parse command and populate fields
+        parse(newCommand);
 
         currentCommand++;
     }
 
     public Command commandType() {
-        return null;
+        return currentCommantType;
     }
 
     public String arg1() {
-        return null;
+        return arg1;
     }
 
     public int arg2() {
-        return 0;
+        return arg2;
     }
     
     private void handleException(Exception e) {
@@ -71,9 +72,55 @@ public class Parser {
     private boolean isCommand(String line) {
         String sanitized = sanitize(line);
 
-        // if (normalized.)
-
         return !sanitized.equals("");
     }
 
+    private void parse(String command) {
+        String[] tokens = command.split(" ");
+
+        parseCommandType(tokens[0].toLowerCase());
+
+        // TODO: if necessary on next project, change this to parse commands specifically by types
+        if (tokens.length > 1) {
+            arg1 = tokens[1];
+        }
+        if (tokens.length > 2) {
+            arg2 = Integer.parseInt(tokens[2]);
+        }
+
+        if (currentCommantType == Command.C_ARITHMETIC) {
+            arg1 = tokens[0];
+        }
+    }
+
+    private void parseCommandType(String strCommand) {
+        // TODO: check if there is a better way to convert from str to enum
+        if (strCommand.equals("push")) {
+            currentCommantType = Command.C_PUSH;
+        }
+        else if (strCommand.equals("pop")) {
+            currentCommantType = Command.C_POP;
+        }
+        else if (strCommand.equals("label")) {
+            currentCommantType = Command.C_LABEL;
+        }
+        else if (strCommand.equals("goto")) {
+            currentCommantType = Command.C_GOTO;
+        }
+        else if (strCommand.equals("if-goto")) {
+            currentCommantType = Command.C_IF;
+        }
+        else if (strCommand.equals("function")) {
+            currentCommantType = Command.C_FUNCTION;
+        }
+        else if (strCommand.equals("call")) {
+            currentCommantType = Command.C_CALL;
+        }
+        else if (strCommand.equals("return")) {
+            currentCommantType = Command.C_RETURN;
+        }
+        else {
+            currentCommantType = Command.C_ARITHMETIC;
+        }
+    }
 }

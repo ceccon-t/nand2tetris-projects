@@ -25,7 +25,7 @@ public class CodeWriter {
         currentInputFile = fileName;
 
         try {
-            outputFileWriter.write("// " + currentInputFile);
+            outputFileWriter.write("// " + currentInputFile + "\n");
         } catch (IOException e) {
             handleException(e);
         }
@@ -33,7 +33,7 @@ public class CodeWriter {
 
     public void writeArithmetic(String command) {
         try {
-            outputFileWriter.write("// " + command);
+            outputFileWriter.write("// " + command + "\n");
 
             // TODO: write hack code to output file
         } catch (IOException e) {
@@ -46,7 +46,8 @@ public class CodeWriter {
             outputFileWriter.write("// " 
                                     + commandToCommentRepresentation(command)
                                     + " " + segment
-                                    + " " + index);
+                                    + " " + index
+                                    + "\n");
 
             // TODO: write hack code to output file
         } catch (IOException e) {

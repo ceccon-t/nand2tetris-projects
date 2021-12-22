@@ -48,6 +48,19 @@ class VMTranslator {
             Parser currentParser = new Parser(filepath);
 
             writer.setFileName(getActualFilename(filepath));
+
+            while (currentParser.hasMoreCommands()) {
+                currentParser.advance();
+
+                Command currentCommand = currentParser.commandType();
+
+                if (currentCommand == Command.C_ARITHMETIC) {
+                    writer.writeArithmetic(currentParser.arg1());
+                } else if (currentCommand == Command.C_PUSH
+                            || currentCommand == Command.C_POP) {
+                    writer.writePushPop(currentCommand, currentParser.arg1(), currentParser.arg2());
+                }
+            }
         }
 
         writer.close();
