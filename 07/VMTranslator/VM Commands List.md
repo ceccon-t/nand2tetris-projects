@@ -33,3 +33,7 @@ function _functionName_ _nLocals_
 call _functionName_ _nArgs_
 return
 
+=================================================================
+NOTES:
+
+VM represents true and false as -1 and 0, respectively.
