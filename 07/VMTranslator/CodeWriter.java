@@ -99,7 +99,8 @@ public class CodeWriter {
             writeLine("@" + registerName);
             writeLine("D=M");
             writeLine("@" + index);
-            writeLine("D=D+A");
+            writeLine("A=D+A");
+            writeLine("D=M");
 
         } else if (segment.equals("pointer")
                     || segment.equals("temp")) {

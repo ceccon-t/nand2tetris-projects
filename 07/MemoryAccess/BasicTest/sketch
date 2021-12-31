@@ -1,0 +1,35 @@
+push constant 10        // Stack[0] = RAM[256]  = 10
+pop local 0             // Local[0] = RAM[300]  = 10
+push constant 21        // Stack[0] = RAM[256]  = 21
+push constant 22        // Stack[1] = RAM[257]  = 22
+pop argument 2          // Argum[2] = RAM[402]  = 22
+pop argument 1          // Argum[1] = RAM[401]  = 21
+push constant 36        // Stack[0] = RAM[256]  = 36
+pop this 6              // This_[6] = RAM[3006] = 36
+push constant 42        // Stack[0] = RAM[256]  = 42
+push constant 45        // Stack[1] = RAM[257]  = 45
+pop that 5              // That_[5] = RAM[3015] = 45
+pop that 2              // That_[2] = RAM[3012] = 42
+push constant 510       // Stack[0] = RAM[256]  = 510
+pop temp 6              // Temp_[6] = RAM[11]   = 510
+----------------------------------------------------------
+push local 0            // Stack[0] = RAM[256]  = 10
+push that 5             // Stack[1] = RAM[257]  = 45
+add                     // Stack[0] = RAM[256]  = 55
+push argument 1         // Stack[1] = RAM[257]  = 21
+sub                     // Stack[0] = RAM[256]  = 34
+push this 6             // Stack[1] = RAM[257]  = 36
+push this 6             // Stack[2] = RAM[258]  = 36
+add                     // Stack[1] = RAM[257]  = 72
+sub                     // Stack[0] = RAM[256]  = -38
+push temp 6             // Stack[1] = RAM[257]  = 510
+add                     // Stack[0] = RAM[256]  = 472
+
+
+================================================
+Stack: 256
+Local: 300
+Argument: 400
+This: 3000
+That: 3010
+
