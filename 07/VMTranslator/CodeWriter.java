@@ -41,13 +41,6 @@ public class CodeWriter {
     public void writeArithmetic(String command) {
         writeLine("// " + command);
 
-        // TODO: write hack code to output file
-        // if (command.equals("add")
-        //     || command.equals("sub")
-        //     || command.equals("and")
-        //     || command.equals("or")) {
-        //     writeBinaryNumericalOperation(command);
-        // } 
         switch(command) {
             case "add":
             case "sub":
@@ -73,10 +66,11 @@ public class CodeWriter {
                     + " " + segment
                     + " " + index);
 
-        // TODO: write hack code to output file
         if (command == Command.C_PUSH) {
             writePush(segment, index);
-        } 
+        } else {
+            writePop(segment, index);
+        }
 
     }
 
@@ -91,8 +85,48 @@ public class CodeWriter {
     private void writePush(String segment, int index) {
 
         // Load value onto D register (assuming constant segment for now)
-        writeLine("@" + index);
-        writeLine("D=A");
+        if (segment.equals("constant")) {
+            // Desired value is already on "index" variable, so just load it onto D
+            writeLine("@" + index);
+            writeLine("D=A");
+
+        } else if (segment.equals("local")
+                    || segment.equals("argument")
+                    || segment.equals("this")
+                    || segment.equals("that")) {
+            // Get pointer to desired segment, add it to index and load memory pointed by result to D 
+            String registerName = segmentToRegisterName(segment);
+            writeLine("@" + registerName);
+            writeLine("D=M");
+            writeLine("@" + index);
+            writeLine("D=D+A");
+
+        } else if (segment.equals("pointer")
+                    || segment.equals("temp")) {
+            // Fixed positions: pointer starting at 3, temp starting at 5
+            
+            // Get semantic name of desired register
+            String registerName = "";
+            if (segment.equals("pointer")) {
+                if (index == 0) {
+                    registerName = "THIS";
+                } else {
+                    registerName = "THAT";
+                }
+            } else {    // segment.equals("temp")
+                int correctedIndex = index + 5;
+                registerName = "R" + correctedIndex;
+            }
+
+            // Load desired value onto D
+            writeLine("@" + registerName);
+            writeLine("D=M");
+
+        } else if (segment.equals("static")) {
+            // Use symbol X.index, where X is the name of the .vm file currently being processed
+            writeLine("@" + currentInputFile + "." + index);
+            writeLine("D=M");
+        }
 
         // General push logic, applies to any segment
         // Assumes desired value is loaded onto D register
@@ -107,6 +141,75 @@ public class CodeWriter {
         // Increment stack pointer
         writeLine("@SP");
         writeLine("M=M+1");
+
+    }
+
+    private void writePop(String segment, int index) {
+
+        // Load memory position to be written on to register R13
+
+        // Handling each segment type with a specific if-block
+        if (segment.equals("local")
+            || segment.equals("argument")
+            || segment.equals("this")
+            || segment.equals("that")) {
+
+            // Get pointer to desired segment, add it to index
+            String registerName = segmentToRegisterName(segment);
+            writeLine("@" + registerName);
+            writeLine("D=M");
+            writeLine("@" + index);
+            writeLine("D=D+A");
+            writeLine("@R13");
+            writeLine("M=D");
+
+        } else if (segment.equals("pointer")
+                    || segment.equals("temp")) {
+            // Fixed positions: pointer starting at 3, temp starting at 5
+            
+            // Get semantic name of desired register
+            String registerName = "";
+            if (segment.equals("pointer")) {
+                if (index == 0) {
+                    registerName = "THIS";
+                } else {
+                    registerName = "THAT";
+                }
+            } else {    // segment.equals("temp")
+                int correctedIndex = index + 5;
+                registerName = "R" + correctedIndex;
+            }
+
+            // Load memory pos to R13
+            writeLine("@" + registerName);
+            writeLine("D=A");
+            writeLine("@R13");
+            writeLine("M=D");
+
+        } else if (segment.equals("static")) {
+            // Use symbol X.index, where X is the name of the .vm file currently being processed
+            writeLine("@" + currentInputFile + "." + index);
+            writeLine("D=A");
+            writeLine("@R13");
+            writeLine("M=D");
+        }
+
+        // General pop logic, applies to any segment
+        // Assumes position to be written to is loaded on register R13
+
+        // Go to topmost value on stack and update stack pointer
+        writeLine("@SP");
+        writeLine("AM=M-1");
+
+        // Load value onto D
+        writeLine("D=M");
+
+        // Point towards position to be written
+        writeLine("@R13");
+        writeLine("A=M");
+
+        // Write popped value
+        writeLine("M=D");
 
     }
 
@@ -224,6 +327,27 @@ public class CodeWriter {
         } catch (IOException e) {
             handleException(e);
         }
+    }
+
+    private String segmentToRegisterName(String segment) {
+        String registerName = "";
+
+        switch (segment) {
+            case "local":
+                registerName = "LCL";
+                break;
+            case "argument":
+                registerName = "ARG";
+                break;
+            case "this":
+                registerName = "THIS";
+                break;
+            case "that":
+                registerName = "THAT";
+                break;
+        }
+
+        return registerName;
     }
 
     private String generateLabel(String description) {
