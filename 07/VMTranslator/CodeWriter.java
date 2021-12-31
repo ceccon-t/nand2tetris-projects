@@ -111,11 +111,8 @@ public class CodeWriter {
             // Focus on next value on the stack
             outputFileWriter.write("A=A-1" + "\n");
 
-            // Do the Add
-            outputFileWriter.write("D=M+D" + "\n");
-
-            // Write result to stack
-            outputFileWriter.write("M=D" + "\n");
+            // Do the Add and save to top of stack
+            outputFileWriter.write("M=M+D" + "\n");
 
             // Move stack pointer to next pos
             outputFileWriter.write("D=A+1" + "\n");
