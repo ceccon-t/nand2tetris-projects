@@ -24,6 +24,8 @@ public class CodeWriter {
                             .replace("/", "")
                             .replace(".asm", "")
                             .toUpperCase();
+
+            writeInit();
         } catch (IOException e) {
             handleException(e);
         }
@@ -76,9 +78,17 @@ public class CodeWriter {
     }
 
     public void writeInit() {
-        // TODO: Implement
         // Writes assembly code that effects the VM initilization, also called bootstrap code.
         // This code must be placed at the beginning of the output file.
+        
+        // SP=256
+        writeLine("@256");
+        writeLine("D=A");
+        writeLine("@SP");
+        writeLine("M=D");
+
+        // call Sys.init
+        writeCall("Sys.init", 0);
     }
 
     public void writeLabel(String label) {
