@@ -74,6 +74,42 @@ public class CodeWriter {
 
     }
 
+    public void writeInit() {
+        // TODO: Implement
+        // Writes assembly code that effects the VM initilization, also called bootstrap code.
+        // This code must be placed at the beginning of the output file.
+    }
+
+    public void writeLabel(String label) {
+        // TODO: Implement
+        // Writes assembly code that effects the label command.
+    }
+
+    public void writeGoto(String label) {
+        // TODO: Implement
+        // Writes assembly code that effects the goto command.
+    }
+
+    public void writeIf(String label) {
+        // TODO: Implement
+        // Writes assembly code that effects the if-goto command.
+    }
+
+    public void writeCall(String functionName, int numArgs) {
+        // TODO: Implement
+        // Writes assembly code that effects the call command.
+    }
+
+    public void writeReturn() {
+        // TODO: Implement
+        // Writes assembly code that effecst the return command.
+    }
+
+    public void writeFunction(String functionName, int numLocals) {
+        // TODO: Implement
+        // Writes assembly code that effects the function command.
+    }
+
     public void close() {
         try {
             outputFileWriter.close();
