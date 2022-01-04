@@ -59,6 +59,12 @@ class VMTranslator {
                 } else if (currentCommand == Command.C_PUSH
                             || currentCommand == Command.C_POP) {
                     writer.writePushPop(currentCommand, currentParser.arg1(), currentParser.arg2());
+                } else if (currentCommand == Command.C_LABEL) {
+                    writer.writeLabel(currentParser.arg1());
+                } else if (currentCommand == Command.C_GOTO) {
+                    writer.writeGoto(currentParser.arg1());
+                } else if (currentCommand == Command.C_IF) {
+                    writer.writeIf(currentParser.arg1());
                 }
             }
         }

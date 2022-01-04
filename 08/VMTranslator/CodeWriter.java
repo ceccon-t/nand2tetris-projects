@@ -8,6 +8,7 @@ public class CodeWriter {
     private String currentInputFile;
     private Integer lineCount = 0;
     private String labelPrefix;
+    private String currentFunction = "";
 
     public CodeWriter(String outputFileName) {
         try {
@@ -81,18 +82,39 @@ public class CodeWriter {
     }
 
     public void writeLabel(String label) {
-        // TODO: Implement
         // Writes assembly code that effects the label command.
+
+        writeLine("// label " + label);
+
+        String fullLabel = generateLabel(label);
+        writeLine("(" + fullLabel + ")");
     }
 
     public void writeGoto(String label) {
-        // TODO: Implement
         // Writes assembly code that effects the goto command.
+
+        writeLine("// goto " + label);
+
+        String fullLabel = generateLabel(label);
+        writeLine("@" + fullLabel);
+        writeLine("0;JMP");
     }
 
     public void writeIf(String label) {
-        // TODO: Implement
         // Writes assembly code that effects the if-goto command.
+
+        writeLine("// if-goto " + label);
+        
+        String fullLabel = generateLabel(label);
+
+        // Pop topmost value on stack
+        writeLine("@SP");
+        writeLine("AM=M-1");
+        writeLine("D=M");
+
+        // Jump if popped value is not zero
+        writeLine("@" + fullLabel);
+        writeLine("D;JNE");
     }
 
     public void writeCall(String functionName, int numArgs) {
@@ -108,6 +130,7 @@ public class CodeWriter {
     public void writeFunction(String functionName, int numLocals) {
         // TODO: Implement
         // Writes assembly code that effects the function command.
+        currentFunction = functionName;
     }
 
     public void close() {
@@ -311,8 +334,8 @@ public class CodeWriter {
         writeLine("D=M-D");
 
         // Generate labels
-        String positiveLabel = generateLabel("POSITIVE");
-        String endLabel = generateLabel("END");
+        String positiveLabel = generateInternalLabel("POSITIVE");
+        String endLabel = generateInternalLabel("END");
 
         // Branch based on comparison
         writeLine("@" + positiveLabel);
@@ -387,8 +410,15 @@ public class CodeWriter {
         return registerName;
     }
 
-    private String generateLabel(String description) {
+    private String generateInternalLabel(String description) {
+        // Generates labels needed by the translation process, not present in the VM code itself
         String newLabel = labelPrefix + "_" + lineCount + "_" + description;
+        return newLabel;
+    }
+
+    private String generateLabel(String label) {
+        // Generates labels that are present in the VM code
+        String newLabel = this.currentFunction + "$" + label;
         return newLabel;
     }
 
