@@ -118,11 +118,74 @@ public class CodeWriter {
     }
 
     public void writeCall(String functionName, int numArgs) {
-        // TODO: Implement
         // Writes assembly code that effects the call command.
 
         writeLine("// call " + functionName + " " + numArgs);
-        writeLine("// NOT IMPLEMENTED YET");
+
+        String return_address = generateInternalLabel("RETURN");
+
+        //    push return-address
+        writeLine("@" + return_address);
+        writeLine("D=A");
+        writeLine("@SP");
+        writeLine("AM=M+1");  // SP++
+        writeLine("A=A-1");  // corrects the "++" from the previous instruction
+        writeLine("M=D");
+
+        //    push LCL 
+        writeLine("@LCL");
+        writeLine("D=M");
+        writeLine("@SP");
+        writeLine("AM=M+1");
+        writeLine("A=A-1");
+        writeLine("M=D");
+
+        //    push ARG
+        writeLine("@ARG");
+        writeLine("D=M");
+        writeLine("@SP");
+        writeLine("AM=M+1");
+        writeLine("A=A-1");
+        writeLine("M=D");
+
+        //    push THIS
+        writeLine("@THIS");
+        writeLine("D=M");
+        writeLine("@SP");
+        writeLine("AM=M+1");
+        writeLine("A=A-1");
+        writeLine("M=D");
+
+        //    push THAT
+        writeLine("@THAT");
+        writeLine("D=M");
+        writeLine("@SP");
+        writeLine("AM=M+1");
+        writeLine("A=A-1");
+        writeLine("M=D");
+
+        //    ARG = SP-n-5
+        writeLine("@SP");
+        writeLine("D=M");
+        writeLine("@" + numArgs);
+        writeLine("D=D-A");
+        writeLine("@5");
+        writeLine("D=D-A");
+        writeLine("@ARG");
+        writeLine("M=D");
+
+        //    LCL = SP
+        writeLine("@SP");
+        writeLine("D=M");
+        writeLine("@LCL");
+        writeLine("M=D");
+
+        //    goto f
+        writeLine("@" + functionName);
+        writeLine("0;JMP");
+
+        //  (return-address)
+        writeLine("(" + return_address + ")");
 
     }
 

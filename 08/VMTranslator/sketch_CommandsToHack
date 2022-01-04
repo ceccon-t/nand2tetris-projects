@@ -36,6 +36,74 @@ return
 ==============================================
 
 ---------------------------------
+call f n 
+
+// on CodeWriter: `return_address = generateInternalLabel("RETURN");`
+
+//    push return-address
+@{return_address}
+D=A
+@SP 
+AM=M+1
+A=A-1 
+M=D 
+
+//    push LCL 
+@LCL 
+D=M 
+@SP 
+AM=M+1
+A=A-1
+M=D 
+
+//    push ARG 
+@ARG 
+D=M 
+@SP 
+AM=M+1
+A=A-1
+M=D  
+
+//    push THIS 
+@THIS 
+D=M 
+@SP 
+AM=M+1
+A=A-1
+M=D 
+
+//    push THAT 
+@THAT 
+D=M 
+@SP 
+AM=M+1
+A=A-1
+M=D 
+
+//    ARG = SP-n-5
+@SP 
+D=M 
+@{n}
+D=D-A 
+@5
+D=D-A 
+@ARG 
+M=D 
+
+//    LCL = SP 
+@SP 
+D=M 
+@LCL 
+M=D 
+
+//    goto f 
+@{f}
+0;JMP 
+
+//  (return-address)
+({return_address})
+
+---------------------------------
 function f k
 
 // (f)
