@@ -120,17 +120,107 @@ public class CodeWriter {
     public void writeCall(String functionName, int numArgs) {
         // TODO: Implement
         // Writes assembly code that effects the call command.
+
+        writeLine("// call " + functionName + " " + numArgs);
+        writeLine("// NOT IMPLEMENTED YET");
+
     }
 
     public void writeReturn() {
-        // TODO: Implement
         // Writes assembly code that effecst the return command.
+
+        writeLine("// return");
+
+        // FRAME = LCL
+        writeLine("@LCL");
+        writeLine("D=M");
+        writeLine("@R13");  // storing temp 'variable' FRAME on R13
+        writeLine("M=D");
+
+        // RET = *(FRAME-5)
+        writeLine("@5");  // using A for arithmetic
+        writeLine("D=D-A");  // D should be loaded with FRAME, as per previous code
+        writeLine("A=D");  
+        writeLine("D=M");
+        writeLine("@R14");  // storing temp 'variable' RET on R14, using A for addressing
+        writeLine("M=D");
+
+        // *ARG = pop()
+        // popping
+        writeLine("@SP");
+        writeLine("AM=M-1");
+        writeLine("D=M");
+        // storing popped value
+        writeLine("@ARG");
+        writeLine("A=M");
+        writeLine("M=D");
+
+        // SP = ARG+1
+        writeLine("@ARG");
+        writeLine("D=M+1");
+        writeLine("@SP");
+        writeLine("M=D");
+
+        // THAT = *(FRAME-1)
+        writeLine("@R13");  //recovering FRAME
+        writeLine("AM=M-1");
+        writeLine("D=M");
+        writeLine("@THAT");
+        writeLine("M=D");
+
+        // THIS = *(FRAME-2)
+        writeLine("@R13");
+        writeLine("AM=M-1");
+        writeLine("D=M");
+        writeLine("@THIS");
+        writeLine("M=D");
+
+        // ARG = *(FRAME-3)
+        writeLine("@R13");
+        writeLine("AM=M-1");
+        writeLine("D=M");
+        writeLine("@ARG");
+        writeLine("M=D");
+
+        // LCL = *(FRAME-4)
+        writeLine("@R13");
+        writeLine("AM=M-1");
+        writeLine("D=M");
+        writeLine("@LCL");
+        writeLine("M=D");
+
+        // goto RET
+        writeLine("@R14");  // recovering RET
+        writeLine("A=M");
+        writeLine("0;JMP");
+
     }
 
     public void writeFunction(String functionName, int numLocals) {
-        // TODO: Implement
         // Writes assembly code that effects the function command.
         currentFunction = functionName;
+
+        writeLine("// function " + functionName + " " + numLocals);
+
+        // (f)
+        writeLine("(" + functionName + ")");
+
+        // not strictly necessary, but avoids generating unnecessary code
+        if (numLocals > 0) {    
+            // initialization
+            writeLine("@SP");
+            writeLine("A=M");
+            //   repeat k times:
+            for (int i = 0; i < numLocals; i++) {
+                //   PUSH 0
+                writeLine("M=0");
+                writeLine("A=A+1");
+            }
+            // wrapup
+            writeLine("D=A");
+            writeLine("@SP");
+            writeLine("M=D");
+        }
     }
 
     public void close() {
