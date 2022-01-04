@@ -65,6 +65,12 @@ class VMTranslator {
                     writer.writeGoto(currentParser.arg1());
                 } else if (currentCommand == Command.C_IF) {
                     writer.writeIf(currentParser.arg1());
+                } else if (currentCommand == Command.C_FUNCTION) {
+                    writer.writeFunction(currentParser.arg1(), currentParser.arg2());
+                } else if (currentCommand == Command.C_RETURN) {
+                    writer.writeReturn();
+                } else if (currentCommand == Command.C_CALL) {
+                    writer.writeCall(currentParser.arg1(), currentParser.arg2());
                 }
             }
         }
