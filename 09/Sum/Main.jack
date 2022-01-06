@@ -1,0 +1,16 @@
+class Main {
+    function void main() {
+        var int a, b, answer;
+
+        let a = Keyboard.readInt("First number: ");
+        let b = Keyboard.readInt("Second number: ");
+
+        let answer = a+b;
+
+
+        do Output.printString("The answer is: ");
+        do Output.printInt(answer);
+        do Output.println();
+        return;
+    }
+}
