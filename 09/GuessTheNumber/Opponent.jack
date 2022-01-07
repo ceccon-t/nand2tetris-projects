@@ -1,0 +1,68 @@
+class Opponent {
+    field int secretNumber, lastGuess;
+    field String name;
+    
+    constructor Opponent new(String opponentName) {
+        let name = opponentName;
+
+        return this;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void chooseNumber() {
+        do Output.printString("Let me think of a number...");
+        do Output.println();
+
+        do Output.printString("...");
+        do Output.println();
+
+        do Output.printString("...");
+        do Output.println();
+
+        let secretNumber = 42;
+
+        do Output.printString("Ok, I have chosen a number.");
+        do Output.println();
+
+        return;
+    }
+
+    method boolean isTheNumber(int guess) {
+        let lastGuess = guess;
+
+        return secretNumber = guess;
+    }
+
+    method boolean guessedTooHigh() {
+        return lastGuess > secretNumber;
+    }
+
+    method boolean guessedTooLow() {
+        return lastGuess < secretNumber;
+    }
+
+    method void greet() {
+        do Output.printString("Hello, my name is ");
+        do Output.printString(name);
+        do Output.printString(", and I will be your opponent.");
+        do Output.println();
+        do Output.println();
+
+        return;
+    }
+
+    method void revealNumber() {
+        do Output.printString("Well, the number I thought of was ");
+        do Output.printInt(secretNumber);
+        do Output.printString(".");
+        do Output.println();
+        do Output.println();
+
+        return;
+    }
+
+}

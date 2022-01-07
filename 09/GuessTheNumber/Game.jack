@@ -1,0 +1,129 @@
+class Game {
+
+    field int guess, remainingAttempts, playAnother;
+    field boolean won;
+    field Opponent opponent;
+
+    constructor Game new() {
+        let opponent = Opponent.new("Jack");
+        return this;
+    }
+
+    method void dispose() {
+        do opponent.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void play() {
+
+        do printIntro();
+
+        let playAnother = 1;
+
+        while (~(playAnother = 0)) {
+            do playMatch();
+
+            do Helper.clear();
+
+            do printMatchResult();
+
+            do askPlayAnother();
+        }
+
+        do Output.printString("Thanks for playing!");
+
+        return;
+    }
+
+    method void playMatch() {
+
+        do Output.printString("Your opponent will think of a number between 1 and 100, you then have 10 attempts to guess it.");
+        do Output.println();
+
+        do opponent.chooseNumber();
+
+        let remainingAttempts = 10;
+        let won = false;
+
+        while((remainingAttempts > 0) & (~won)) {
+            do printRemaining();
+
+            let guess = Keyboard.readInt("Make a guess: ");
+
+            // Avoid overflowing screen
+            if ((remainingAttempts = 8)) {
+                do Helper.clear();
+            }
+
+            if (opponent.isTheNumber(guess)) {
+                let won = true;
+            } else {
+                do Output.printString("Guessed wrong. ");
+
+                if (opponent.guessedTooHigh()) {
+                    do Output.printString("The guess was too high, try lower.");
+                } else {
+                    do Output.printString("The guess was too low, try higher.");
+                }
+
+                do Output.println();
+            }
+
+            let remainingAttempts = remainingAttempts - 1;
+
+        }
+
+        return;
+    }
+
+    method void printIntro() {
+        do Output.printString("Let's play...");
+        do Output.println();
+
+        do Output.printString("Conjuring an opponent.");
+        do Output.println();
+        do Output.println();
+
+        do opponent.greet();
+
+        return;
+    }
+
+    method void printRemaining() {
+        do Output.printString("You have ");
+        do Output.printInt(remainingAttempts);
+        do Output.printString(" attempts left.");
+        do Output.println();
+
+        return;
+    }
+
+    method void printMatchResult() {
+        do opponent.revealNumber();
+        if (won) {
+            do Output.printString("Congratulations, you won!");
+            do Output.println();
+        } else {
+            do Output.printString("How unfortunate, you lost...");
+            do Output.println();
+        }
+
+        return;
+    }
+
+    method void askPlayAnother() {
+        do Output.println();
+        let playAnother = Keyboard.readInt("Play another match (0 for NO, any other number for YES)? ");
+        do Output.println();
+        do Output.println();
+
+        if (~(playAnother = 0)) {
+            do Helper.clear();
+        }
+
+        return;
+    }
+
+
+}

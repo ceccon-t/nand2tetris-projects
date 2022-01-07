@@ -1,0 +1,16 @@
+class Main {
+
+    function void main() {
+        var Game game;
+
+        do Output.printString("=== Welcome to Guess The Number! ===");
+        do Output.println();
+        do Output.println();
+
+        let game = Game.new();
+        do game.play();
+
+        return;
+    }
+
+}
