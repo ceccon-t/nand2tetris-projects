@@ -43,6 +43,7 @@ public class JackAnalyzer {
             String targetFile = generateTargetFilename(source);
 
             System.out.println("Compiling file " + filepath + ", target: " + targetFile);
+            JackTokenizer tokenizer = new JackTokenizer(filepath);
 
         }
     }
