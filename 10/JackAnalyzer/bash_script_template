@@ -1,0 +1,3 @@
+#!/bin/bash
+JACK_ANALYZER_FOLDER=<add_folder_here>
+java -cp $JACK_ANALYZER_FOLDER JackAnalyzer $1
