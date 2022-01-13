@@ -44,6 +44,10 @@ public class JackGrammar {
         return allSymbols.contains(rawToken);
     }
 
+    public static Boolean isSymbol(Character c) {
+        return isSymbol(c.toString());
+    }
+
     public static Boolean isKeyword(String rawToken) {
         return allKeywords.containsKey(rawToken);
     }

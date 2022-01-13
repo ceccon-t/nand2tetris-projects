@@ -145,13 +145,42 @@ public class JackTokenizer {
     }
 
     /**
-     * Travel through sanitized input parsing existing tokens and adding them to 'tokens' variable.
+     * Walk through sanitized input parsing existing tokens and adding them to 'tokens' variable.
      * Assumes sanitizedInput has already been initialized correctly and cleansed of comments.
      */
     private void parseTokens() {
         tokens = new ArrayList<Token>();
 
-        
+        int i = 0, j;
+        int end = sanitizedInput.length();
+
+        // Walk through sanitized input using variables i and j as index
+        while (i < end) {
+
+            // If is whitespace, eat all adjacent whitespaces
+            if (Character.isWhitespace(sanitizedInput.charAt(i))) {
+                j = i+1;
+                while (Character.isWhitespace(sanitizedInput.charAt(j)) && j < end) {
+                    j++;
+                }
+                i = j;
+            }
+
+            // If is symbol, add symbol as token
+            else if (JackGrammar.isSymbol(sanitizedInput.charAt(i))) {
+                tokens.add(new Token(sanitizedInput.substring(i, i+1)));
+            }
+
+            // If is double quote, find end of string constant
+
+            // If is digit, find end of integer constant
+
+            // If is letter or underscore, find end of word (which can be either keyword or identifier)
+            
+            // Move on
+            i++;
+        }
+
     }
     
     private void printTokensToFile() {
@@ -180,7 +209,7 @@ public class JackTokenizer {
             FileWriter xmlWriter = new FileWriter(outputFileXml);
             xmlWriter.write("<tokens>\n");
             for (Token token : tokens) {
-                xmlWriter.append("\t<token>" + token.getRepresentation() + "</token>");
+                xmlWriter.append("\t<token>" + token.getRepresentation() + "</token>\n");
             }
             xmlWriter.append("</tokens>\n");
             xmlWriter.flush();
