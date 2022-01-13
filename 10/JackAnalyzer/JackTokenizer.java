@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,7 @@ public class JackTokenizer {
 
     private List<String> inputLines;
     private String sanitizedInput;
+    private List<Token> tokens;
 
 
     public JackTokenizer(String inputFilePath) {
@@ -29,12 +31,15 @@ public class JackTokenizer {
                             .filter(s -> !isEmptyLine(s))
                             .collect(Collectors.toList());
 
-            buildProcessedInput();
-
-            sanitizedInput = removeMultilineComments(sanitizedInput);
         } catch(IOException e) {
             throw new RuntimeException("Could not read from input file: " + inputFilePath);
         }
+
+        buildProcessedInput();
+
+        sanitizedInput = removeMultilineComments(sanitizedInput);
+
+        parseTokens();
 
         // System.out.println(sanitizedInput);
         printTokensToFile();
@@ -139,13 +144,25 @@ public class JackTokenizer {
         sanitizedInput = builder.toString();
     }
 
+    /**
+     * Travel through sanitized input parsing existing tokens and adding them to 'tokens' variable.
+     * Assumes sanitizedInput has already been initialized correctly and cleansed of comments.
+     */
+    private void parseTokens() {
+        tokens = new ArrayList<Token>();
+
+        
+    }
+    
     private void printTokensToFile() {
-        String outputFileName = originalPath.replace(".jack", "_T-Output.txt");
+        String outputFileNameTxt = originalPath.replace(".jack", "_T-Output.txt");
+        String outputFileNameXml = originalPath.replace(".jack", "_T-Output.xml");
 
         try {
-            File outputFile = new File(outputFileName);
+            // Create txt file with sanitized code
+            File outputFile = new File(outputFileNameTxt);
             if (outputFile.exists()) {
-                    outputFile.delete();
+                outputFile.delete();
             }
             outputFile.createNewFile();
 
@@ -153,6 +170,22 @@ public class JackTokenizer {
             // System.out.println(sanitizedInput);
             writer.write(sanitizedInput);
             writer.flush();
+            writer.close();
+
+            // Create xml file with tokens
+            File outputFileXml = new File(outputFileNameXml);
+            if (outputFileXml.exists()) {
+                outputFileXml.delete();
+            }
+            FileWriter xmlWriter = new FileWriter(outputFileXml);
+            xmlWriter.write("<tokens>\n");
+            for (Token token : tokens) {
+                xmlWriter.append("\t<token>" + token.getRepresentation() + "</token>");
+            }
+            xmlWriter.append("</tokens>\n");
+            xmlWriter.flush();
+            xmlWriter.close();
+
         } catch (IOException e) {
             throw new RuntimeException("Could not write tokens to file, for input file: " + originalPath);
         }
