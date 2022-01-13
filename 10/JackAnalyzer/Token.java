@@ -5,10 +5,15 @@ public class Token {
 
     public Token(String raw) {
         this.representation = raw;
+        this.type = JackGrammar.determineType(raw);
     }
 
     public String getRepresentation() {
         return this.representation;
+    }
+
+    public TokenTypes getType() {
+        return this.type;
     }
     
 }
