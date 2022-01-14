@@ -62,19 +62,13 @@ public class CompilationEngine {
         this.indentLevel++;
 
         Token scopeT = eatAny();
-        if (!scopeT.getRepresentation().equals("static") 
-            && !scopeT.getRepresentation().equals("field")) {
+        if (!JackGrammar.declaresScope(scopeT)) {
                 throw new RuntimeException("SYNTAX ERROR! Expected 'static' or 'field', but found '" + scopeT.getRepresentation() + "'");
         }
         appendXmlIndentedLine(scopeT.xmlRepresentation());
 
         Token typeT = eatAny();
-        if (
-            !typeT.getRepresentation().equals("int")
-            && !typeT.getRepresentation().equals("char")
-            && !typeT.getRepresentation().equals("boolean")
-            && !typeT.getType().equals(TokenTypes.IDENTIFIER)
-        ) {
+        if ( !JackGrammar.indicatesType(typeT) ) {
             throw new RuntimeException("SYNTAX ERROR! Expected a type (int|char|boolean|className), but found '" + scopeT.getRepresentation() + "'");
         }
         appendXmlIndentedLine(typeT.xmlRepresentation());

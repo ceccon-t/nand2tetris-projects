@@ -153,4 +153,19 @@ public class JackGrammar {
                 || tokenKeyword == Keywords.METHOD;
     }
 
+    public static Boolean declaresScope(Token token)  {
+        return token.getRepresentation().equals("static") 
+                || token.getRepresentation().equals("field");
+    }
+
+    public static Boolean isPrimitiveType(Token token) {
+        return token.getRepresentation().equals("int")
+                || token.getRepresentation().equals("char")
+                || token.getRepresentation().equals("boolean");
+    }
+
+    public static Boolean indicatesType(Token token) {
+        return isPrimitiveType(token) || token.getType().equals(TokenTypes.IDENTIFIER);
+    }
+
 }
