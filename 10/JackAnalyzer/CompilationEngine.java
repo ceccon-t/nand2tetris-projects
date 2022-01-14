@@ -18,29 +18,35 @@ public class CompilationEngine {
     }
 
     public void compileClass() {
-        xmlBuilder.append("<class>");
+        xmlBuilder.append("<class>\n");
         
         this.level++;
-        indent();
 
         Token classT = eat("class");
+        indent();
         xmlBuilder.append(classT.xmlRepresentation() + "\n");
 
         Token classNameT = eatIdentifier();
+        indent();
         xmlBuilder.append(classNameT.xmlRepresentation() + "\n");
 
         Token curlyT = eat("{");
+        indent();
         xmlBuilder.append(curlyT.xmlRepresentation() + "\n");
 
-        Token next = eatAny();
+        Token next = tokenizer.getCurrent();
         while (JackGrammar.startsVarDeclaration(next)) {
             compileClassVarDec();
-            next = eatAny();
+            next = tokenizer.getCurrent();
         }
+
+        writeToXmlFile();
+        
+        System.out.println("ATTENTION: Process will enter an infinite loop now, as the remaining functionality is not finished. Kill the process and check the xml output.");
 
         while (JackGrammar.startsSubroutineDeclaration(next)) {
             compileSubroutine();
-            next = eatAny();
+            next = tokenizer.getCurrent();
         }
 
         Token closeCurlyT = eat("}");
@@ -55,7 +61,57 @@ public class CompilationEngine {
     }
 
     public void compileClassVarDec() {
-        // TODO: Implement
+        indent();
+        xmlBuilder.append("<classVarDec>\n");
+
+        this.level++;
+
+        Token scopeT = eatAny();
+        if (!scopeT.getRepresentation().equals("static") 
+            && !scopeT.getRepresentation().equals("field")) {
+                throw new RuntimeException("SYNTAX ERROR! Expected 'static' or 'field', but found '" + scopeT.getRepresentation() + "'");
+        }
+        indent(); 
+        xmlBuilder.append(scopeT.xmlRepresentation() + "\n");
+
+        Token typeT = eatAny();
+        if (
+            !typeT.getRepresentation().equals("int")
+            && !typeT.getRepresentation().equals("char")
+            && !typeT.getRepresentation().equals("boolean")
+            && !typeT.getType().equals(TokenTypes.IDENTIFIER)
+        ) {
+            throw new RuntimeException("SYNTAX ERROR! Expected a type (int|char|boolean|className), but found '" + scopeT.getRepresentation() + "'");
+        }
+        indent();
+        xmlBuilder.append(typeT.xmlRepresentation() + "\n");
+
+
+        Token varNameT = eatIdentifier();
+        indent();
+        xmlBuilder.append(varNameT.xmlRepresentation() + "\n");
+
+        // Parsing (',' varName)*
+        Token nextCommaT, nextVarNameT;
+        while (tokenizer.getCurrent().getRepresentation().equals(",")) {
+            nextCommaT = eat(",");
+
+            indent();
+            xmlBuilder.append(nextCommaT.xmlRepresentation() + "\n");
+
+            nextVarNameT = eatIdentifier();
+            indent();
+            xmlBuilder.append(nextVarNameT.xmlRepresentation() + "\n");
+        }
+
+        Token semicolonT = eat(";");
+        indent();
+        xmlBuilder.append(semicolonT.xmlRepresentation() + "\n");
+        
+        this.level--;
+
+        indent();
+        xmlBuilder.append("</classVarDec>\n");
     }
 
     public void compileSubroutine() {
