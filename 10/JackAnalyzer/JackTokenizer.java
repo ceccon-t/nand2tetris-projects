@@ -81,6 +81,14 @@ public class JackTokenizer {
         return tokens.get(currentPos);
     }
 
+    /**
+     * Returns the token that is <offset> positions ahead of current one,
+     *   without changing current position
+     */
+    public Token lookAhead(int offset) {
+        return tokens.get(currentPos + offset);
+    }
+
     private String removeInlineComments(String line) {
         String sanitized = line;
 

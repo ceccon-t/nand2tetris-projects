@@ -137,7 +137,7 @@ public class JackGrammar {
         return allKeywords.get(token.getRepresentation());
     }
 
-    public static Boolean startsVarDeclaration(Token token) {
+    public static Boolean startsClassVarDeclaration(Token token) {
         if (!(token.getType() == TokenTypes.KEYWORD)) return false;
 
         Keywords tokenKeyword = allKeywords.get(token.getRepresentation());
@@ -166,6 +166,36 @@ public class JackGrammar {
 
     public static Boolean indicatesType(Token token) {
         return isPrimitiveType(token) || token.getType().equals(TokenTypes.IDENTIFIER);
+    }
+
+    public static Boolean indicatesSubroutineReturnType(Token token) {
+        return indicatesType(token) || token.getRepresentation().equals("void");
+    }
+
+    public static Boolean startsLocalVariableDeclaration(Token token) {
+        return token.getRepresentation().equals("var");
+    }
+
+    public static Boolean startsStatement(Token token) {
+        String rep = token.getRepresentation();
+
+        return rep.equals("let") || rep.equals("if") 
+                || rep.equals("while") || rep.equals("do") 
+                || rep.equals("return");
+
+    }
+
+    public static Boolean isOp(Token token) {
+        String rep = token.getRepresentation();
+
+        return rep.equals("+") || rep.equals("-") || rep.equals("*") || rep.equals("/")
+                || rep.equals("&") || rep.equals("|") || rep.equals("<") || rep.equals(">")
+                || rep.equals("=");
+    }
+
+    public static Boolean isUnaryOp(Token token) {
+        String rep = token.getRepresentation();
+        return rep.equals("-") || rep.equals("~");
     }
 
 }
