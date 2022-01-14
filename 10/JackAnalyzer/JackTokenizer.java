@@ -3,15 +3,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class JackTokenizer {
-
-    // private String rawInput;
 
     private String originalPath;
 
@@ -24,8 +21,6 @@ public class JackTokenizer {
         originalPath = inputFilePath;
 
         try {
-            // rawInput = Files.readString(Path.of(inputFilePath));
-
             inputLines = Files.lines(Paths.get(inputFilePath), StandardCharsets.UTF_8)
                             .map(s -> removeInlineComments(s))
                             .filter(s -> !isEmptyLine(s))
@@ -41,7 +36,6 @@ public class JackTokenizer {
 
         parseTokens();
 
-        // System.out.println(sanitizedInput);
         printTokensToFile();
 
     }
@@ -212,6 +206,48 @@ public class JackTokenizer {
         }
 
     }
+
+    /**
+     * Used only in the context of generating the tokens xml, to test Project 10
+     */
+    private String tokenTypeStringRepresentation(TokenTypes type) {
+        String rep = "";
+
+        switch(type) {
+            case KEYWORD:
+                rep = "keyword";
+                break;
+            case SYMBOL:
+                rep = "symbol";
+                break;
+            case IDENTIFIER:
+                rep = "identifier";
+                break;
+            case INT_CONST:
+                rep = "integerConstant";
+                break;
+            case STRING_CONST:
+                rep = "stringConstant";
+                break;
+        }
+
+        return rep;
+    }
+
+    /**
+     * Used only in the context of generating the tokens xml, to test Project 10
+     */
+    private String canonicalXmlTokenRepresentation(Token token) {
+        String rep = token.getRepresentation();
+
+        if (rep.equals("<")) rep = "&lt;";
+        else if (rep.equals(">")) rep = "&gt;";
+        else if (rep.equals("\"")) rep = "&quot";
+        else if (rep.equals("&")) rep = "&amp;";
+
+        return rep;
+    }
+
     
     private void printTokensToFile() {
         String outputFileNameXml = originalPath.replace(".jack", "_T-Output.xml");
@@ -220,17 +256,19 @@ public class JackTokenizer {
             // Code below can be useful to debug the removal of comments:
 
             // // Create txt file with sanitized code
-            String outputFileNameTxt = originalPath.replace(".jack", "_WithoutComments.txt");
-            File outputFile = new File(outputFileNameTxt);
-            if (outputFile.exists()) {
-                outputFile.delete();
-            }
-            outputFile.createNewFile();
+            // String outputFileNameTxt = originalPath.replace(".jack", "_WithoutComments.txt");
+            // File outputFile = new File(outputFileNameTxt);
+            // if (outputFile.exists()) {
+            //     outputFile.delete();
+            // }
+            // outputFile.createNewFile();
 
-            FileWriter writer = new FileWriter(outputFile);
-            writer.write(sanitizedInput);
-            writer.flush();
-            writer.close();
+            // FileWriter writer = new FileWriter(outputFile);
+            // writer.write(sanitizedInput);
+            // writer.flush();
+            // writer.close();
+
+            // // END OF - Create txt file with sanitized code
 
             // Create xml file with tokens
             File outputFileXml = new File(outputFileNameXml);
@@ -240,7 +278,8 @@ public class JackTokenizer {
             FileWriter xmlWriter = new FileWriter(outputFileXml);
             xmlWriter.write("<tokens>\n");
             for (Token token : tokens) {
-                xmlWriter.append("\t<token>" + token.getRepresentation() + "</token>\n");
+                String rep = tokenTypeStringRepresentation(token.getType());
+                xmlWriter.append("<" + rep + "> " + canonicalXmlTokenRepresentation(token) + " </" + rep + ">\n");
             }
             xmlWriter.append("</tokens>\n");
             xmlWriter.flush();
