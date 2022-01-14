@@ -137,4 +137,20 @@ public class JackGrammar {
         return allKeywords.get(token.getRepresentation());
     }
 
+    public static Boolean startsVarDeclaration(Token token) {
+        if (!(token.getType() == TokenTypes.KEYWORD)) return false;
+
+        Keywords tokenKeyword = allKeywords.get(token.getRepresentation());
+        return tokenKeyword == Keywords.STATIC || tokenKeyword == Keywords.FIELD;
+    }
+
+    public static Boolean startsSubroutineDeclaration(Token token) {
+        if (!(token.getType() == TokenTypes.KEYWORD)) return false;
+
+        Keywords tokenKeyword = allKeywords.get(token.getRepresentation());
+        return tokenKeyword == Keywords.CONSTRUCTOR 
+                || tokenKeyword == Keywords.FUNCTION
+                || tokenKeyword == Keywords.METHOD;
+    }
+
 }

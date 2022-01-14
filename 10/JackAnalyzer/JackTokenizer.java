@@ -77,6 +77,10 @@ public class JackTokenizer {
         return tokens.get(currentPos).getRepresentation();
     }
 
+    public Token getCurrent() {
+        return tokens.get(currentPos);
+    }
+
     private String removeInlineComments(String line) {
         String sanitized = line;
 

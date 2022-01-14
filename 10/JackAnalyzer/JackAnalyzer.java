@@ -44,7 +44,8 @@ public class JackAnalyzer {
 
             System.out.println("Compiling file " + filepath + ", target: " + targetFile);
             JackTokenizer tokenizer = new JackTokenizer(filepath);
-
+            CompilationEngine engine = new CompilationEngine(tokenizer, filepath.replace(".jack", "-Output.xml"));
+            engine.compileClass();
         }
     }
 
