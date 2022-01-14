@@ -205,48 +205,6 @@ public class JackTokenizer {
 
     }
 
-    /**
-     * Used only in the context of generating the tokens xml, to test Project 10
-     */
-    private String tokenTypeStringRepresentation(TokenTypes type) {
-        String rep = "";
-
-        switch(type) {
-            case KEYWORD:
-                rep = "keyword";
-                break;
-            case SYMBOL:
-                rep = "symbol";
-                break;
-            case IDENTIFIER:
-                rep = "identifier";
-                break;
-            case INT_CONST:
-                rep = "integerConstant";
-                break;
-            case STRING_CONST:
-                rep = "stringConstant";
-                break;
-        }
-
-        return rep;
-    }
-
-    /**
-     * Used only in the context of generating the tokens xml, to test Project 10
-     */
-    private String canonicalXmlTokenRepresentation(Token token) {
-        String rep = token.getRepresentation();
-
-        if (rep.equals("<")) rep = "&lt;";
-        else if (rep.equals(">")) rep = "&gt;";
-        else if (rep.equals("\"")) rep = "&quot";
-        else if (rep.equals("&")) rep = "&amp;";
-
-        return rep;
-    }
-
-    
     private void printTokensToFile() {
         String outputFileNameXml = originalPath.replace(".jack", "_T-Output.xml");
 
@@ -276,8 +234,7 @@ public class JackTokenizer {
             FileWriter xmlWriter = new FileWriter(outputFileXml);
             xmlWriter.write("<tokens>\n");
             for (Token token : tokens) {
-                String rep = tokenTypeStringRepresentation(token.getType());
-                xmlWriter.append("<" + rep + "> " + canonicalXmlTokenRepresentation(token) + " </" + rep + ">\n");
+                xmlWriter.append(token.xmlRepresentation() + "\n");
             }
             xmlWriter.append("</tokens>\n");
             xmlWriter.flush();
