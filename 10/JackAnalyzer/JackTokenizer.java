@@ -172,11 +172,11 @@ public class JackTokenizer {
             }
 
             // If is double quote, find end of string constant
-            else if (sanitizedInput.charAt(i) == '"') { //System.out.println(sanitizedInput.substring(i));
-                j = i+1; //System.out.print(sanitizedInput.charAt(i));
+            else if (sanitizedInput.charAt(i) == '"') { 
+                j = i+1; 
                 // Find closing double quote
                 while (sanitizedInput.charAt(j) != '"') {
-                    j++; //System.out.print(sanitizedInput.charAt(j));
+                    j++; 
                 }
 
                 tokens.add(new Token(sanitizedInput.substring(i, j+1)));
