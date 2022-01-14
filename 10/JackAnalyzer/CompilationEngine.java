@@ -6,33 +6,30 @@ public class CompilationEngine {
     private JackTokenizer tokenizer;
     private String outputPath;
     private StringBuilder xmlBuilder;
-    private int level;
+    private int indentLevel;
 
     public CompilationEngine(JackTokenizer inputTokenizer, String outputFilePath) {
         this.tokenizer = inputTokenizer;
         this.outputPath = outputFilePath;
         this.xmlBuilder = new StringBuilder();
-        this.level = 0;
+        this.indentLevel = 0;
 
         this.tokenizer.advance();
     }
 
     public void compileClass() {
-        xmlBuilder.append("<class>\n");
+        appendXmlIndentedLine("<class>");
         
-        this.level++;
+        this.indentLevel++;
 
         Token classT = eat("class");
-        indent();
-        xmlBuilder.append(classT.xmlRepresentation() + "\n");
+        appendXmlIndentedLine(classT.xmlRepresentation());
 
         Token classNameT = eatIdentifier();
-        indent();
-        xmlBuilder.append(classNameT.xmlRepresentation() + "\n");
+        appendXmlIndentedLine(classNameT.xmlRepresentation());
 
         Token curlyT = eat("{");
-        indent();
-        xmlBuilder.append(curlyT.xmlRepresentation() + "\n");
+        appendXmlIndentedLine(curlyT.xmlRepresentation());
 
         Token next = tokenizer.getCurrent();
         while (JackGrammar.startsVarDeclaration(next)) {
@@ -50,29 +47,26 @@ public class CompilationEngine {
         }
 
         Token closeCurlyT = eat("}");
-        xmlBuilder.append(closeCurlyT.xmlRepresentation() + "\n");
+        appendXmlIndentedLine(closeCurlyT.xmlRepresentation());
 
-        this.level--;
-        indent();
+        this.indentLevel--;
 
-        xmlBuilder.append("</class>");
+        appendXmlIndentedLine("</class>");
 
         if (!tokenizer.hasMoreTokens()) writeToXmlFile();
     }
 
     public void compileClassVarDec() {
-        indent();
-        xmlBuilder.append("<classVarDec>\n");
+        appendXmlIndentedLine("<classVarDec>");
 
-        this.level++;
+        this.indentLevel++;
 
         Token scopeT = eatAny();
         if (!scopeT.getRepresentation().equals("static") 
             && !scopeT.getRepresentation().equals("field")) {
                 throw new RuntimeException("SYNTAX ERROR! Expected 'static' or 'field', but found '" + scopeT.getRepresentation() + "'");
         }
-        indent(); 
-        xmlBuilder.append(scopeT.xmlRepresentation() + "\n");
+        appendXmlIndentedLine(scopeT.xmlRepresentation());
 
         Token typeT = eatAny();
         if (
@@ -83,35 +77,28 @@ public class CompilationEngine {
         ) {
             throw new RuntimeException("SYNTAX ERROR! Expected a type (int|char|boolean|className), but found '" + scopeT.getRepresentation() + "'");
         }
-        indent();
-        xmlBuilder.append(typeT.xmlRepresentation() + "\n");
+        appendXmlIndentedLine(typeT.xmlRepresentation());
 
 
         Token varNameT = eatIdentifier();
-        indent();
-        xmlBuilder.append(varNameT.xmlRepresentation() + "\n");
+        appendXmlIndentedLine(varNameT.xmlRepresentation());
 
         // Parsing (',' varName)*
         Token nextCommaT, nextVarNameT;
         while (tokenizer.getCurrent().getRepresentation().equals(",")) {
             nextCommaT = eat(",");
-
-            indent();
-            xmlBuilder.append(nextCommaT.xmlRepresentation() + "\n");
+            appendXmlIndentedLine(nextCommaT.xmlRepresentation());
 
             nextVarNameT = eatIdentifier();
-            indent();
-            xmlBuilder.append(nextVarNameT.xmlRepresentation() + "\n");
+            appendXmlIndentedLine(nextVarNameT.xmlRepresentation());
         }
 
         Token semicolonT = eat(";");
-        indent();
-        xmlBuilder.append(semicolonT.xmlRepresentation() + "\n");
+        appendXmlIndentedLine(semicolonT.xmlRepresentation());
         
-        this.level--;
+        this.indentLevel--;
 
-        indent();
-        xmlBuilder.append("</classVarDec>\n");
+        appendXmlIndentedLine("</classVarDec>");
     }
 
     public void compileSubroutine() {
@@ -189,9 +176,14 @@ public class CompilationEngine {
     }
 
     private void indent() {
-        for (int i = 0; i < level; i++) {
+        for (int i = 0; i < indentLevel; i++) {
             xmlBuilder.append("\t");
         }
+    }
+
+    private void appendXmlIndentedLine(String content) {
+        indent();
+        xmlBuilder.append(content + "\n");
     }
 
     private void writeToXmlFile() {
