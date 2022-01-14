@@ -1,64 +1,125 @@
 <tokens>
+	<token>class</token>
+	<token>Main</token>
 	<token>{</token>
+	<token>static</token>
+	<token>boolean</token>
+	<token>test</token>
 	<token>;</token>
+	<token>function</token>
+	<token>void</token>
+	<token>main</token>
 	<token>(</token>
 	<token>)</token>
 	<token>{</token>
+	<token>var</token>
+	<token>SquareGame</token>
+	<token>game</token>
 	<token>;</token>
+	<token>let</token>
+	<token>game</token>
 	<token>=</token>
+	<token>SquareGame</token>
 	<token>.</token>
+	<token>new</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
+	<token>do</token>
+	<token>game</token>
 	<token>.</token>
+	<token>run</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
+	<token>do</token>
+	<token>game</token>
 	<token>.</token>
+	<token>dispose</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
+	<token>return</token>
 	<token>;</token>
 	<token>}</token>
+	<token>function</token>
+	<token>void</token>
+	<token>test</token>
 	<token>(</token>
 	<token>)</token>
 	<token>{</token>
+	<token>var</token>
+	<token>int</token>
+	<token>i</token>
 	<token>,</token>
+	<token>j</token>
 	<token>;</token>
+	<token>var</token>
+	<token>String</token>
+	<token>s</token>
 	<token>;</token>
+	<token>var</token>
+	<token>Array</token>
+	<token>a</token>
 	<token>;</token>
+	<token>if</token>
 	<token>(</token>
+	<token>false</token>
 	<token>)</token>
 	<token>{</token>
+	<token>let</token>
+	<token>s</token>
 	<token>=</token>
 	<token>string constant</token>
 	<token>;</token>
+	<token>let</token>
+	<token>s</token>
 	<token>=</token>
+	<token>null</token>
 	<token>;</token>
+	<token>let</token>
+	<token>a</token>
 	<token>[</token>
+	<token>1</token>
 	<token>]</token>
 	<token>=</token>
+	<token>a</token>
 	<token>[</token>
+	<token>2</token>
 	<token>]</token>
 	<token>;</token>
 	<token>}</token>
+	<token>else</token>
 	<token>{</token>
+	<token>let</token>
+	<token>i</token>
 	<token>=</token>
+	<token>i</token>
 	<token>*</token>
 	<token>(</token>
 	<token>-</token>
+	<token>j</token>
 	<token>)</token>
 	<token>;</token>
+	<token>let</token>
+	<token>j</token>
 	<token>=</token>
+	<token>j</token>
 	<token>/</token>
 	<token>(</token>
 	<token>-</token>
+	<token>2</token>
 	<token>)</token>
 	<token>;</token>
+	<token>let</token>
+	<token>i</token>
 	<token>=</token>
+	<token>i</token>
 	<token>|</token>
+	<token>j</token>
 	<token>;</token>
 	<token>}</token>
+	<token>return</token>
 	<token>;</token>
 	<token>}</token>
 	<token>}</token>

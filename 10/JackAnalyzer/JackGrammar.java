@@ -119,5 +119,19 @@ public class JackGrammar {
         return type;
     }
 
+    public static Boolean startsWord(Character c) {
+        return Character.isAlphabetic(c) || c == '_';
+    }
+
+    public static Boolean breaksWord(Character c) {
+        if (Character.isWhitespace(c)) return true;
+
+        if (isSymbol(c)) return true;
+
+        if ( !Character.isAlphabetic(c) && !Character.isDigit(c) && c != '_' ) return true;
+
+        return false;
+    }
+
     
 }

@@ -1,295 +1,560 @@
 <tokens>
+	<token>class</token>
+	<token>Square</token>
 	<token>{</token>
+	<token>field</token>
+	<token>int</token>
+	<token>x</token>
 	<token>,</token>
+	<token>y</token>
 	<token>;</token>
+	<token>field</token>
+	<token>int</token>
+	<token>size</token>
 	<token>;</token>
+	<token>constructor</token>
+	<token>Square</token>
+	<token>new</token>
 	<token>(</token>
+	<token>int</token>
+	<token>Ax</token>
 	<token>,</token>
+	<token>int</token>
+	<token>Ay</token>
 	<token>,</token>
+	<token>int</token>
+	<token>Asize</token>
 	<token>)</token>
 	<token>{</token>
+	<token>let</token>
+	<token>x</token>
 	<token>=</token>
+	<token>Ax</token>
 	<token>;</token>
+	<token>let</token>
+	<token>y</token>
 	<token>=</token>
+	<token>Ay</token>
 	<token>;</token>
+	<token>let</token>
+	<token>size</token>
 	<token>=</token>
+	<token>Asize</token>
 	<token>;</token>
+	<token>do</token>
+	<token>draw</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
+	<token>return</token>
+	<token>this</token>
 	<token>;</token>
 	<token>}</token>
+	<token>method</token>
+	<token>void</token>
+	<token>dispose</token>
 	<token>(</token>
 	<token>)</token>
 	<token>{</token>
+	<token>do</token>
+	<token>Memory</token>
 	<token>.</token>
+	<token>deAlloc</token>
 	<token>(</token>
+	<token>this</token>
 	<token>)</token>
 	<token>;</token>
+	<token>return</token>
 	<token>;</token>
 	<token>}</token>
+	<token>method</token>
+	<token>void</token>
+	<token>draw</token>
 	<token>(</token>
 	<token>)</token>
 	<token>{</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>setColor</token>
 	<token>(</token>
+	<token>true</token>
 	<token>)</token>
 	<token>;</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>drawRectangle</token>
 	<token>(</token>
+	<token>x</token>
 	<token>,</token>
+	<token>y</token>
 	<token>,</token>
+	<token>x</token>
 	<token>+</token>
+	<token>size</token>
 	<token>,</token>
+	<token>y</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token>;</token>
+	<token>return</token>
 	<token>;</token>
 	<token>}</token>
+	<token>method</token>
+	<token>void</token>
+	<token>erase</token>
 	<token>(</token>
 	<token>)</token>
 	<token>{</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>setColor</token>
 	<token>(</token>
+	<token>false</token>
 	<token>)</token>
 	<token>;</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>drawRectangle</token>
 	<token>(</token>
+	<token>x</token>
 	<token>,</token>
+	<token>y</token>
 	<token>,</token>
+	<token>x</token>
 	<token>+</token>
+	<token>size</token>
 	<token>,</token>
+	<token>y</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token>;</token>
+	<token>return</token>
 	<token>;</token>
 	<token>}</token>
+	<token>method</token>
+	<token>void</token>
+	<token>incSize</token>
 	<token>(</token>
 	<token>)</token>
 	<token>{</token>
+	<token>if</token>
 	<token>(</token>
 	<token>(</token>
 	<token>(</token>
+	<token>y</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token><</token>
+	<token>254</token>
 	<token>)</token>
 	<token>&</token>
 	<token>(</token>
 	<token>(</token>
+	<token>x</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token><</token>
+	<token>510</token>
 	<token>)</token>
 	<token>)</token>
 	<token>{</token>
+	<token>do</token>
+	<token>erase</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
+	<token>let</token>
+	<token>size</token>
 	<token>=</token>
+	<token>size</token>
 	<token>+</token>
+	<token>2</token>
 	<token>;</token>
+	<token>do</token>
+	<token>draw</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
 	<token>}</token>
+	<token>return</token>
 	<token>;</token>
 	<token>}</token>
+	<token>method</token>
+	<token>void</token>
+	<token>decSize</token>
 	<token>(</token>
 	<token>)</token>
 	<token>{</token>
+	<token>if</token>
 	<token>(</token>
+	<token>size</token>
 	<token>></token>
+	<token>2</token>
 	<token>)</token>
 	<token>{</token>
+	<token>do</token>
+	<token>erase</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
+	<token>let</token>
+	<token>size</token>
 	<token>=</token>
+	<token>size</token>
 	<token>-</token>
+	<token>2</token>
 	<token>;</token>
+	<token>do</token>
+	<token>draw</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
 	<token>}</token>
+	<token>return</token>
 	<token>;</token>
 	<token>}</token>
+	<token>method</token>
+	<token>void</token>
+	<token>moveUp</token>
 	<token>(</token>
 	<token>)</token>
 	<token>{</token>
+	<token>if</token>
 	<token>(</token>
+	<token>y</token>
 	<token>></token>
+	<token>1</token>
 	<token>)</token>
 	<token>{</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>setColor</token>
 	<token>(</token>
+	<token>false</token>
 	<token>)</token>
 	<token>;</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>drawRectangle</token>
 	<token>(</token>
+	<token>x</token>
 	<token>,</token>
 	<token>(</token>
+	<token>y</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token>-</token>
+	<token>1</token>
 	<token>,</token>
+	<token>x</token>
 	<token>+</token>
+	<token>size</token>
 	<token>,</token>
+	<token>y</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token>;</token>
+	<token>let</token>
+	<token>y</token>
 	<token>=</token>
+	<token>y</token>
 	<token>-</token>
+	<token>2</token>
 	<token>;</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>setColor</token>
 	<token>(</token>
+	<token>true</token>
 	<token>)</token>
 	<token>;</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>drawRectangle</token>
 	<token>(</token>
+	<token>x</token>
 	<token>,</token>
+	<token>y</token>
 	<token>,</token>
+	<token>x</token>
 	<token>+</token>
+	<token>size</token>
 	<token>,</token>
+	<token>y</token>
 	<token>+</token>
+	<token>1</token>
 	<token>)</token>
 	<token>;</token>
 	<token>}</token>
+	<token>return</token>
 	<token>;</token>
 	<token>}</token>
+	<token>method</token>
+	<token>void</token>
+	<token>moveDown</token>
 	<token>(</token>
 	<token>)</token>
 	<token>{</token>
+	<token>if</token>
 	<token>(</token>
 	<token>(</token>
+	<token>y</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token><</token>
+	<token>254</token>
 	<token>)</token>
 	<token>{</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>setColor</token>
 	<token>(</token>
+	<token>false</token>
 	<token>)</token>
 	<token>;</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>drawRectangle</token>
 	<token>(</token>
+	<token>x</token>
 	<token>,</token>
+	<token>y</token>
 	<token>,</token>
+	<token>x</token>
 	<token>+</token>
+	<token>size</token>
 	<token>,</token>
+	<token>y</token>
 	<token>+</token>
+	<token>1</token>
 	<token>)</token>
 	<token>;</token>
+	<token>let</token>
+	<token>y</token>
 	<token>=</token>
+	<token>y</token>
 	<token>+</token>
+	<token>2</token>
 	<token>;</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>setColor</token>
 	<token>(</token>
+	<token>true</token>
 	<token>)</token>
 	<token>;</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>drawRectangle</token>
 	<token>(</token>
+	<token>x</token>
 	<token>,</token>
 	<token>(</token>
+	<token>y</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token>-</token>
+	<token>1</token>
 	<token>,</token>
+	<token>x</token>
 	<token>+</token>
+	<token>size</token>
 	<token>,</token>
+	<token>y</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token>;</token>
 	<token>}</token>
+	<token>return</token>
 	<token>;</token>
 	<token>}</token>
+	<token>method</token>
+	<token>void</token>
+	<token>moveLeft</token>
 	<token>(</token>
 	<token>)</token>
 	<token>{</token>
+	<token>if</token>
 	<token>(</token>
+	<token>x</token>
 	<token>></token>
+	<token>1</token>
 	<token>)</token>
 	<token>{</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>setColor</token>
 	<token>(</token>
+	<token>false</token>
 	<token>)</token>
 	<token>;</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>drawRectangle</token>
 	<token>(</token>
 	<token>(</token>
+	<token>x</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token>-</token>
+	<token>1</token>
 	<token>,</token>
+	<token>y</token>
 	<token>,</token>
+	<token>x</token>
 	<token>+</token>
+	<token>size</token>
 	<token>,</token>
+	<token>y</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token>;</token>
+	<token>let</token>
+	<token>x</token>
 	<token>=</token>
+	<token>x</token>
 	<token>-</token>
+	<token>2</token>
 	<token>;</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>setColor</token>
 	<token>(</token>
+	<token>true</token>
 	<token>)</token>
 	<token>;</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>drawRectangle</token>
 	<token>(</token>
+	<token>x</token>
 	<token>,</token>
+	<token>y</token>
 	<token>,</token>
+	<token>x</token>
 	<token>+</token>
+	<token>1</token>
 	<token>,</token>
+	<token>y</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token>;</token>
 	<token>}</token>
+	<token>return</token>
 	<token>;</token>
 	<token>}</token>
+	<token>method</token>
+	<token>void</token>
+	<token>moveRight</token>
 	<token>(</token>
 	<token>)</token>
 	<token>{</token>
+	<token>if</token>
 	<token>(</token>
 	<token>(</token>
+	<token>x</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token><</token>
+	<token>510</token>
 	<token>)</token>
 	<token>{</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>setColor</token>
 	<token>(</token>
+	<token>false</token>
 	<token>)</token>
 	<token>;</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>drawRectangle</token>
 	<token>(</token>
+	<token>x</token>
 	<token>,</token>
+	<token>y</token>
 	<token>,</token>
+	<token>x</token>
 	<token>+</token>
+	<token>1</token>
 	<token>,</token>
+	<token>y</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token>;</token>
+	<token>let</token>
+	<token>x</token>
 	<token>=</token>
+	<token>x</token>
 	<token>+</token>
+	<token>2</token>
 	<token>;</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>setColor</token>
 	<token>(</token>
+	<token>true</token>
 	<token>)</token>
 	<token>;</token>
+	<token>do</token>
+	<token>Screen</token>
 	<token>.</token>
+	<token>drawRectangle</token>
 	<token>(</token>
 	<token>(</token>
+	<token>x</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token>-</token>
+	<token>1</token>
 	<token>,</token>
+	<token>y</token>
 	<token>,</token>
+	<token>x</token>
 	<token>+</token>
+	<token>size</token>
 	<token>,</token>
+	<token>y</token>
 	<token>+</token>
+	<token>size</token>
 	<token>)</token>
 	<token>;</token>
 	<token>}</token>
+	<token>return</token>
 	<token>;</token>
 	<token>}</token>
 	<token>}</token>

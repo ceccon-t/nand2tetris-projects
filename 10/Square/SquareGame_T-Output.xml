@@ -1,173 +1,314 @@
 <tokens>
+	<token>class</token>
+	<token>SquareGame</token>
 	<token>{</token>
+	<token>field</token>
+	<token>Square</token>
+	<token>square</token>
 	<token>;</token>
+	<token>field</token>
+	<token>int</token>
+	<token>direction</token>
 	<token>;</token>
+	<token>constructor</token>
+	<token>SquareGame</token>
+	<token>new</token>
 	<token>(</token>
 	<token>)</token>
 	<token>{</token>
+	<token>let</token>
+	<token>square</token>
 	<token>=</token>
+	<token>Square</token>
 	<token>.</token>
+	<token>new</token>
 	<token>(</token>
+	<token>0</token>
 	<token>,</token>
+	<token>0</token>
 	<token>,</token>
+	<token>30</token>
 	<token>)</token>
 	<token>;</token>
+	<token>let</token>
+	<token>direction</token>
 	<token>=</token>
+	<token>0</token>
 	<token>;</token>
+	<token>return</token>
+	<token>this</token>
 	<token>;</token>
 	<token>}</token>
+	<token>method</token>
+	<token>void</token>
+	<token>dispose</token>
 	<token>(</token>
 	<token>)</token>
 	<token>{</token>
+	<token>do</token>
+	<token>square</token>
 	<token>.</token>
+	<token>dispose</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
+	<token>do</token>
+	<token>Memory</token>
 	<token>.</token>
+	<token>deAlloc</token>
 	<token>(</token>
+	<token>this</token>
 	<token>)</token>
 	<token>;</token>
+	<token>return</token>
 	<token>;</token>
 	<token>}</token>
+	<token>method</token>
+	<token>void</token>
+	<token>moveSquare</token>
 	<token>(</token>
 	<token>)</token>
 	<token>{</token>
+	<token>if</token>
 	<token>(</token>
+	<token>direction</token>
 	<token>=</token>
+	<token>1</token>
 	<token>)</token>
 	<token>{</token>
+	<token>do</token>
+	<token>square</token>
 	<token>.</token>
+	<token>moveUp</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
 	<token>}</token>
+	<token>if</token>
 	<token>(</token>
+	<token>direction</token>
 	<token>=</token>
+	<token>2</token>
 	<token>)</token>
 	<token>{</token>
+	<token>do</token>
+	<token>square</token>
 	<token>.</token>
+	<token>moveDown</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
 	<token>}</token>
+	<token>if</token>
 	<token>(</token>
+	<token>direction</token>
 	<token>=</token>
+	<token>3</token>
 	<token>)</token>
 	<token>{</token>
+	<token>do</token>
+	<token>square</token>
 	<token>.</token>
+	<token>moveLeft</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
 	<token>}</token>
+	<token>if</token>
 	<token>(</token>
+	<token>direction</token>
 	<token>=</token>
+	<token>4</token>
 	<token>)</token>
 	<token>{</token>
+	<token>do</token>
+	<token>square</token>
 	<token>.</token>
+	<token>moveRight</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
 	<token>}</token>
+	<token>do</token>
+	<token>Sys</token>
 	<token>.</token>
+	<token>wait</token>
 	<token>(</token>
+	<token>5</token>
 	<token>)</token>
 	<token>;</token>
+	<token>return</token>
 	<token>;</token>
 	<token>}</token>
+	<token>method</token>
+	<token>void</token>
+	<token>run</token>
 	<token>(</token>
 	<token>)</token>
 	<token>{</token>
+	<token>var</token>
+	<token>char</token>
+	<token>key</token>
 	<token>;</token>
+	<token>var</token>
+	<token>boolean</token>
+	<token>exit</token>
 	<token>;</token>
+	<token>let</token>
+	<token>exit</token>
 	<token>=</token>
+	<token>false</token>
 	<token>;</token>
+	<token>while</token>
 	<token>(</token>
 	<token>~</token>
+	<token>exit</token>
 	<token>)</token>
 	<token>{</token>
+	<token>while</token>
 	<token>(</token>
+	<token>key</token>
 	<token>=</token>
+	<token>0</token>
 	<token>)</token>
 	<token>{</token>
+	<token>let</token>
+	<token>key</token>
 	<token>=</token>
+	<token>Keyboard</token>
 	<token>.</token>
+	<token>keyPressed</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
+	<token>do</token>
+	<token>moveSquare</token>
 	<token>(</token>
 	<token>)</token>
-	<token>;</token>
-	<token>}</token>
-	<token>(</token>
-	<token>=</token>
-	<token>)</token>
-	<token>{</token>
-	<token>=</token>
 	<token>;</token>
 	<token>}</token>
+	<token>if</token>
 	<token>(</token>
+	<token>key</token>
 	<token>=</token>
+	<token>81</token>
 	<token>)</token>
 	<token>{</token>
+	<token>let</token>
+	<token>exit</token>
+	<token>=</token>
+	<token>true</token>
+	<token>;</token>
+	<token>}</token>
+	<token>if</token>
+	<token>(</token>
+	<token>key</token>
+	<token>=</token>
+	<token>90</token>
+	<token>)</token>
+	<token>{</token>
+	<token>do</token>
+	<token>square</token>
 	<token>.</token>
+	<token>decSize</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
 	<token>}</token>
+	<token>if</token>
 	<token>(</token>
+	<token>key</token>
 	<token>=</token>
+	<token>88</token>
 	<token>)</token>
 	<token>{</token>
+	<token>do</token>
+	<token>square</token>
 	<token>.</token>
+	<token>incSize</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
 	<token>}</token>
+	<token>if</token>
 	<token>(</token>
+	<token>key</token>
 	<token>=</token>
-	<token>)</token>
-	<token>{</token>
-	<token>=</token>
-	<token>;</token>
-	<token>}</token>
-	<token>(</token>
-	<token>=</token>
+	<token>131</token>
 	<token>)</token>
 	<token>{</token>
+	<token>let</token>
+	<token>direction</token>
 	<token>=</token>
+	<token>1</token>
 	<token>;</token>
 	<token>}</token>
+	<token>if</token>
 	<token>(</token>
+	<token>key</token>
 	<token>=</token>
+	<token>133</token>
 	<token>)</token>
 	<token>{</token>
+	<token>let</token>
+	<token>direction</token>
 	<token>=</token>
+	<token>2</token>
 	<token>;</token>
 	<token>}</token>
+	<token>if</token>
 	<token>(</token>
+	<token>key</token>
 	<token>=</token>
+	<token>130</token>
 	<token>)</token>
 	<token>{</token>
+	<token>let</token>
+	<token>direction</token>
 	<token>=</token>
+	<token>3</token>
 	<token>;</token>
 	<token>}</token>
+	<token>if</token>
+	<token>(</token>
+	<token>key</token>
+	<token>=</token>
+	<token>132</token>
+	<token>)</token>
+	<token>{</token>
+	<token>let</token>
+	<token>direction</token>
+	<token>=</token>
+	<token>4</token>
+	<token>;</token>
+	<token>}</token>
+	<token>while</token>
 	<token>(</token>
 	<token>~</token>
 	<token>(</token>
+	<token>key</token>
 	<token>=</token>
+	<token>0</token>
 	<token>)</token>
 	<token>)</token>
 	<token>{</token>
+	<token>let</token>
+	<token>key</token>
 	<token>=</token>
+	<token>Keyboard</token>
 	<token>.</token>
+	<token>keyPressed</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
+	<token>do</token>
+	<token>moveSquare</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
 	<token>}</token>
 	<token>}</token>
+	<token>return</token>
 	<token>;</token>
 	<token>}</token>
 	<token>}</token>

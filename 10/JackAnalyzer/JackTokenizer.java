@@ -184,8 +184,28 @@ public class JackTokenizer {
             }
 
             // If is digit, find end of integer constant
+            else if (Character.isDigit(sanitizedInput.charAt(i))) {
+                j = i+1;
+                // Find end of digit sequence
+                while ( Character.isDigit(sanitizedInput.charAt(j)) && j < end) {
+                    j++;
+                }
+
+                tokens.add(new Token(sanitizedInput.substring(i, j)));
+                i = j-1;
+            }
 
             // If is letter or underscore, find end of word (which can be either keyword or identifier)
+            else if (JackGrammar.startsWord(sanitizedInput.charAt(i))) {
+                j = i+1;
+                // Find end of word
+                while ( !JackGrammar.breaksWord(sanitizedInput.charAt(j))) {
+                    j++;
+                }
+
+                tokens.add(new Token(sanitizedInput.substring(i, j)));
+                i = j-1;
+            }
             
             // Move on
             i++;
@@ -194,11 +214,13 @@ public class JackTokenizer {
     }
     
     private void printTokensToFile() {
-        String outputFileNameTxt = originalPath.replace(".jack", "_T-Output.txt");
         String outputFileNameXml = originalPath.replace(".jack", "_T-Output.xml");
 
         try {
-            // Create txt file with sanitized code
+            // Code below can be useful to debug the removal of comments:
+
+            // // Create txt file with sanitized code
+            String outputFileNameTxt = originalPath.replace(".jack", "_WithoutComments.txt");
             File outputFile = new File(outputFileNameTxt);
             if (outputFile.exists()) {
                 outputFile.delete();
@@ -206,7 +228,6 @@ public class JackTokenizer {
             outputFile.createNewFile();
 
             FileWriter writer = new FileWriter(outputFile);
-            // System.out.println(sanitizedInput);
             writer.write(sanitizedInput);
             writer.flush();
             writer.close();
