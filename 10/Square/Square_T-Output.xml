@@ -1,4 +1,5 @@
 <tokens>
+	<token>{</token>
 	<token>,</token>
 	<token>;</token>
 	<token>;</token>
@@ -6,36 +7,30 @@
 	<token>,</token>
 	<token>,</token>
 	<token>)</token>
+	<token>{</token>
+	<token>=</token>
 	<token>;</token>
+	<token>=</token>
 	<token>;</token>
+	<token>=</token>
 	<token>;</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
 	<token>;</token>
+	<token>}</token>
 	<token>(</token>
 	<token>)</token>
+	<token>{</token>
 	<token>.</token>
 	<token>(</token>
 	<token>)</token>
 	<token>;</token>
 	<token>;</token>
+	<token>}</token>
 	<token>(</token>
 	<token>)</token>
-	<token>.</token>
-	<token>(</token>
-	<token>)</token>
-	<token>;</token>
-	<token>.</token>
-	<token>(</token>
-	<token>,</token>
-	<token>,</token>
-	<token>,</token>
-	<token>)</token>
-	<token>;</token>
-	<token>;</token>
-	<token>(</token>
-	<token>)</token>
+	<token>{</token>
 	<token>.</token>
 	<token>(</token>
 	<token>)</token>
@@ -44,55 +39,16 @@
 	<token>(</token>
 	<token>,</token>
 	<token>,</token>
+	<token>+</token>
 	<token>,</token>
+	<token>+</token>
 	<token>)</token>
 	<token>;</token>
 	<token>;</token>
+	<token>}</token>
 	<token>(</token>
 	<token>)</token>
-	<token>(</token>
-	<token>(</token>
-	<token>)</token>
-	<token>)</token>
-	<token>(</token>
-	<token>)</token>
-	<token>)</token>
-	<token>)</token>
-	<token>(</token>
-	<token>)</token>
-	<token>;</token>
-	<token>;</token>
-	<token>(</token>
-	<token>)</token>
-	<token>;</token>
-	<token>;</token>
-	<token>(</token>
-	<token>)</token>
-	<token>)</token>
-	<token>(</token>
-	<token>)</token>
-	<token>;</token>
-	<token>;</token>
-	<token>(</token>
-	<token>)</token>
-	<token>;</token>
-	<token>;</token>
-	<token>(</token>
-	<token>)</token>
-	<token>)</token>
-	<token>.</token>
-	<token>(</token>
-	<token>)</token>
-	<token>;</token>
-	<token>.</token>
-	<token>(</token>
-	<token>,</token>
-	<token>)</token>
-	<token>,</token>
-	<token>,</token>
-	<token>)</token>
-	<token>;</token>
-	<token>;</token>
+	<token>{</token>
 	<token>.</token>
 	<token>(</token>
 	<token>)</token>
@@ -101,15 +57,70 @@
 	<token>(</token>
 	<token>,</token>
 	<token>,</token>
+	<token>+</token>
 	<token>,</token>
+	<token>+</token>
 	<token>)</token>
 	<token>;</token>
 	<token>;</token>
+	<token>}</token>
 	<token>(</token>
 	<token>)</token>
+	<token>{</token>
+	<token>(</token>
+	<token>(</token>
+	<token>(</token>
+	<token>+</token>
+	<token>)</token>
+	<token><</token>
+	<token>)</token>
+	<token>&</token>
+	<token>(</token>
+	<token>(</token>
+	<token>+</token>
+	<token>)</token>
+	<token><</token>
+	<token>)</token>
+	<token>)</token>
+	<token>{</token>
 	<token>(</token>
 	<token>)</token>
+	<token>;</token>
+	<token>=</token>
+	<token>+</token>
+	<token>;</token>
+	<token>(</token>
 	<token>)</token>
+	<token>;</token>
+	<token>}</token>
+	<token>;</token>
+	<token>}</token>
+	<token>(</token>
+	<token>)</token>
+	<token>{</token>
+	<token>(</token>
+	<token>></token>
+	<token>)</token>
+	<token>{</token>
+	<token>(</token>
+	<token>)</token>
+	<token>;</token>
+	<token>=</token>
+	<token>-</token>
+	<token>;</token>
+	<token>(</token>
+	<token>)</token>
+	<token>;</token>
+	<token>}</token>
+	<token>;</token>
+	<token>}</token>
+	<token>(</token>
+	<token>)</token>
+	<token>{</token>
+	<token>(</token>
+	<token>></token>
+	<token>)</token>
+	<token>{</token>
 	<token>.</token>
 	<token>(</token>
 	<token>)</token>
@@ -117,40 +128,18 @@
 	<token>.</token>
 	<token>(</token>
 	<token>,</token>
-	<token>,</token>
-	<token>,</token>
-	<token>)</token>
-	<token>;</token>
-	<token>;</token>
-	<token>.</token>
 	<token>(</token>
+	<token>+</token>
+	<token>)</token>
+	<token>-</token>
+	<token>,</token>
+	<token>+</token>
+	<token>,</token>
+	<token>+</token>
 	<token>)</token>
 	<token>;</token>
-	<token>.</token>
-	<token>(</token>
-	<token>,</token>
-	<token>)</token>
-	<token>,</token>
-	<token>,</token>
-	<token>)</token>
-	<token>;</token>
-	<token>;</token>
-	<token>(</token>
-	<token>)</token>
-	<token>)</token>
-	<token>.</token>
-	<token>(</token>
-	<token>)</token>
-	<token>;</token>
-	<token>.</token>
-	<token>(</token>
-	<token>(</token>
-	<token>)</token>
-	<token>,</token>
-	<token>,</token>
-	<token>,</token>
-	<token>)</token>
-	<token>;</token>
+	<token>=</token>
+	<token>-</token>
 	<token>;</token>
 	<token>.</token>
 	<token>(</token>
@@ -160,15 +149,24 @@
 	<token>(</token>
 	<token>,</token>
 	<token>,</token>
+	<token>+</token>
 	<token>,</token>
+	<token>+</token>
 	<token>)</token>
 	<token>;</token>
+	<token>}</token>
 	<token>;</token>
+	<token>}</token>
 	<token>(</token>
 	<token>)</token>
+	<token>{</token>
 	<token>(</token>
+	<token>(</token>
+	<token>+</token>
 	<token>)</token>
+	<token><</token>
 	<token>)</token>
+	<token>{</token>
 	<token>.</token>
 	<token>(</token>
 	<token>)</token>
@@ -177,9 +175,102 @@
 	<token>(</token>
 	<token>,</token>
 	<token>,</token>
+	<token>+</token>
 	<token>,</token>
+	<token>+</token>
 	<token>)</token>
 	<token>;</token>
+	<token>=</token>
+	<token>+</token>
+	<token>;</token>
+	<token>.</token>
+	<token>(</token>
+	<token>)</token>
+	<token>;</token>
+	<token>.</token>
+	<token>(</token>
+	<token>,</token>
+	<token>(</token>
+	<token>+</token>
+	<token>)</token>
+	<token>-</token>
+	<token>,</token>
+	<token>+</token>
+	<token>,</token>
+	<token>+</token>
+	<token>)</token>
+	<token>;</token>
+	<token>}</token>
+	<token>;</token>
+	<token>}</token>
+	<token>(</token>
+	<token>)</token>
+	<token>{</token>
+	<token>(</token>
+	<token>></token>
+	<token>)</token>
+	<token>{</token>
+	<token>.</token>
+	<token>(</token>
+	<token>)</token>
+	<token>;</token>
+	<token>.</token>
+	<token>(</token>
+	<token>(</token>
+	<token>+</token>
+	<token>)</token>
+	<token>-</token>
+	<token>,</token>
+	<token>,</token>
+	<token>+</token>
+	<token>,</token>
+	<token>+</token>
+	<token>)</token>
+	<token>;</token>
+	<token>=</token>
+	<token>-</token>
+	<token>;</token>
+	<token>.</token>
+	<token>(</token>
+	<token>)</token>
+	<token>;</token>
+	<token>.</token>
+	<token>(</token>
+	<token>,</token>
+	<token>,</token>
+	<token>+</token>
+	<token>,</token>
+	<token>+</token>
+	<token>)</token>
+	<token>;</token>
+	<token>}</token>
+	<token>;</token>
+	<token>}</token>
+	<token>(</token>
+	<token>)</token>
+	<token>{</token>
+	<token>(</token>
+	<token>(</token>
+	<token>+</token>
+	<token>)</token>
+	<token><</token>
+	<token>)</token>
+	<token>{</token>
+	<token>.</token>
+	<token>(</token>
+	<token>)</token>
+	<token>;</token>
+	<token>.</token>
+	<token>(</token>
+	<token>,</token>
+	<token>,</token>
+	<token>+</token>
+	<token>,</token>
+	<token>+</token>
+	<token>)</token>
+	<token>;</token>
+	<token>=</token>
+	<token>+</token>
 	<token>;</token>
 	<token>.</token>
 	<token>(</token>
@@ -188,11 +279,18 @@
 	<token>.</token>
 	<token>(</token>
 	<token>(</token>
+	<token>+</token>
 	<token>)</token>
+	<token>-</token>
 	<token>,</token>
 	<token>,</token>
+	<token>+</token>
 	<token>,</token>
+	<token>+</token>
 	<token>)</token>
 	<token>;</token>
+	<token>}</token>
 	<token>;</token>
+	<token>}</token>
+	<token>}</token>
 </tokens>

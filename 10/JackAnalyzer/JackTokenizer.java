@@ -163,7 +163,7 @@ public class JackTokenizer {
                 while (Character.isWhitespace(sanitizedInput.charAt(j)) && j < end) {
                     j++;
                 }
-                i = j;
+                i = j-1;
             }
 
             // If is symbol, add symbol as token
@@ -172,6 +172,16 @@ public class JackTokenizer {
             }
 
             // If is double quote, find end of string constant
+            else if (sanitizedInput.charAt(i) == '"') { //System.out.println(sanitizedInput.substring(i));
+                j = i+1; //System.out.print(sanitizedInput.charAt(i));
+                // Find closing double quote
+                while (sanitizedInput.charAt(j) != '"') {
+                    j++; //System.out.print(sanitizedInput.charAt(j));
+                }
+
+                tokens.add(new Token(sanitizedInput.substring(i, j+1)));
+                i = j;
+            }
 
             // If is digit, find end of integer constant
 

@@ -1,8 +1,11 @@
 <tokens>
+	<token>{</token>
 	<token>;</token>
 	<token>(</token>
 	<token>)</token>
+	<token>{</token>
 	<token>;</token>
+	<token>=</token>
 	<token>.</token>
 	<token>(</token>
 	<token>)</token>
@@ -16,26 +19,47 @@
 	<token>)</token>
 	<token>;</token>
 	<token>;</token>
+	<token>}</token>
 	<token>(</token>
 	<token>)</token>
+	<token>{</token>
 	<token>,</token>
 	<token>;</token>
 	<token>;</token>
 	<token>;</token>
+	<token>(</token>
 	<token>)</token>
+	<token>{</token>
+	<token>=</token>
+	<token>string constant</token>
 	<token>;</token>
+	<token>=</token>
 	<token>;</token>
 	<token>[</token>
 	<token>]</token>
+	<token>=</token>
 	<token>[</token>
 	<token>]</token>
 	<token>;</token>
+	<token>}</token>
+	<token>{</token>
+	<token>=</token>
+	<token>*</token>
+	<token>(</token>
 	<token>-</token>
 	<token>)</token>
 	<token>;</token>
+	<token>=</token>
+	<token>/</token>
+	<token>(</token>
 	<token>-</token>
 	<token>)</token>
 	<token>;</token>
+	<token>=</token>
+	<token>|</token>
 	<token>;</token>
+	<token>}</token>
 	<token>;</token>
+	<token>}</token>
+	<token>}</token>
 </tokens>

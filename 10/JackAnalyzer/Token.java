@@ -4,8 +4,13 @@ public class Token {
     private TokenTypes type;
 
     public Token(String raw) {
-        this.representation = raw;
         this.type = JackGrammar.determineType(raw);
+
+        if (this.type == TokenTypes.STRING_CONST) {
+            this.representation = raw.substring(1, raw.length()-1);
+        } else {
+            this.representation = raw;
+        }
     }
 
     public String getRepresentation() {
