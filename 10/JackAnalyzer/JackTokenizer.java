@@ -16,6 +16,8 @@ public class JackTokenizer {
     private String sanitizedInput;
     private List<Token> tokens;
 
+    private int currentPos;
+
 
     public JackTokenizer(String inputFilePath) {
         originalPath = inputFilePath;
@@ -36,47 +38,43 @@ public class JackTokenizer {
 
         parseTokens();
 
-        printTokensToFile();
+        // The call below generates the xml of the tokens, to test the first part of Project 10
+        // printTokensToFile();
+
+        currentPos = -1;  // "Initially there is no current token", as per specification
 
     }
 
     public Boolean hasMoreTokens() {
-        // TODO: Implement
-        return false;
+        return currentPos < (tokens.size()-1);
     }
 
     public void advance() {
-        // TODO: Implement
+        currentPos++;
     }
 
     public TokenTypes tokenType() {
-        // TODO: Implement
-        return null;
+        return tokens.get(currentPos).getType();
     }
 
     public Keywords keyWord() {
-        // TODO: Implement
-        return null;        
+        return JackGrammar.getKeywordEnum(tokens.get(currentPos));
     }
 
     public Character symbol() {
-        // TODO: Implement
-        return null;
+        return tokens.get(currentPos).getRepresentation().charAt(0);
     }
 
     public String identifier() {
-        // TODO: Implement
-        return null;
+        return tokens.get(currentPos).getRepresentation();
     }
 
     public Integer intVal() {
-        // TODO: Implement
-        return null;
+        return Integer.valueOf(tokens.get(0).getRepresentation());
     }
 
     public String stringVal() {
-        // TODO: Implement
-        return null;
+        return tokens.get(currentPos).getRepresentation();
     }
 
     private String removeInlineComments(String line) {

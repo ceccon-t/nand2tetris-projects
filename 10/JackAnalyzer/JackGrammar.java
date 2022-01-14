@@ -133,5 +133,8 @@ public class JackGrammar {
         return false;
     }
 
-    
+    public static Keywords getKeywordEnum(Token token) {
+        return allKeywords.get(token.getRepresentation());
+    }
+
 }
