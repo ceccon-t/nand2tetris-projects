@@ -560,6 +560,8 @@ public class CompilationEngine {
     public void compileIf() {
         appendXmlIndentedLine("<ifStatement>");
         this.indentLevel++;
+        String l1 = generateUniqueLabel("L1_IF");
+        String l2 = generateUniqueLabel("L2_IF");
 
         // Pattern: 'if' '(' expression ')' '{' statements '}' ('else' '{' statements '}')?
         // compilation logic
@@ -575,6 +577,10 @@ public class CompilationEngine {
         // Parsing expression
         compileExpression();
 
+        // VM:
+        vmWriter.writeArithmetic(VMCommand.NEG);
+        vmWriter.writeIf(l1);
+
         // Parsing ')'
         Token closeParenT = eat(")");
         appendXmlIndentedLine(closeParenT.xmlRepresentation());
@@ -586,9 +592,15 @@ public class CompilationEngine {
         // Parsing statements
         compileStatements();
 
+        // VM:
+        vmWriter.writeGoto(l2);
+
         // Parsing '}'
         Token closeCurlyT = eat("}");
         appendXmlIndentedLine(closeCurlyT.xmlRepresentation());
+
+        // VM:
+        vmWriter.writeLabel(l1);
 
         // Parsing pattern: ('else' '{' statements '}')?
         if (tokenizer.getCurrent().getRepresentation().equals("else")) {
@@ -607,6 +619,8 @@ public class CompilationEngine {
             Token anotherCloseCurlyT = eat("}");
             appendXmlIndentedLine(anotherCloseCurlyT.xmlRepresentation());
         }
+
+        vmWriter.writeLabel(l2);
 
         // end of compilation logic
 
