@@ -1,0 +1,3 @@
+#!/bin/bash
+JACK_COMPILER_FOLDER=<add_folder_here>
+java -cp $JACK_COMPILER_FOLDER JackCompiler $1
