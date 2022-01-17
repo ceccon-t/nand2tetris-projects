@@ -11,6 +11,7 @@ public class CompilationEngine {
     private String className;
     private String currentSubroutineName;
     private Map<UUID, Integer> nargsToSubroutine = new HashMap<>();
+    private Integer uniqueLabelNumber = 0;
 
     private SymbolTable symbolTable;
     private VMWriter vmWriter;
@@ -470,9 +471,15 @@ public class CompilationEngine {
     public void compileWhile() {
         appendXmlIndentedLine("<whileStatement>");
         this.indentLevel++;
+        String l1 = generateUniqueLabel("L1_WHILE");
+        String l2 = generateUniqueLabel("L2_WHILE");
+
 
         // Pattern: 'while' '(' expression ')' '{' statements '}'
         // compilation logic
+
+        // VM:
+        vmWriter.writeLabel(l1);
 
         // Parsing 'while'
         Token whileT = eat("while");
@@ -485,6 +492,10 @@ public class CompilationEngine {
         // Parsing expression
         compileExpression();
 
+        // VM:
+        vmWriter.writeArithmetic(VMCommand.NEG);
+        vmWriter.writeIf(l2);
+
         // Parsing ')'
         Token closeParenT = eat(")");
         appendXmlIndentedLine(closeParenT.xmlRepresentation());
@@ -496,9 +507,15 @@ public class CompilationEngine {
         // Parsing statements
         compileStatements();
 
+        // VM:
+        vmWriter.writeGoto(l1);
+
         // Parsing '}'
         Token closeCurlyT = eat("}");
         appendXmlIndentedLine(closeCurlyT.xmlRepresentation());
+
+        // VM:
+        vmWriter.writeLabel(l2);
 
         // end of compilation logic
 
@@ -873,6 +890,12 @@ public class CompilationEngine {
         VariableKind kind = symbolTable.kindOf(variable);
         Segment seg = kindToSegment(kind);
         vmWriter.writePush(seg, index);
+    }
+
+    private String generateUniqueLabel(String description) {
+        String label = this.className + "_" + uniqueLabelNumber.toString() + "_" + description;
+        uniqueLabelNumber++;
+        return label.toUpperCase();
     }
 
     

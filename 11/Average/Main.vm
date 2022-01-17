@@ -1,4 +1,9 @@
 function Main.main 4
+label MAIN_0_L1_WHILE
+neg
+if-goto MAIN_1_L2_WHILE
+goto MAIN_0_L1_WHILE
+label MAIN_1_L2_WHILE
 call Output.printString 1
 pop temp 0
 call Output.printInt 1
