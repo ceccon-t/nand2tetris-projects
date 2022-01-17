@@ -5,14 +5,19 @@ import java.io.IOException;
 public class CompilationEngine {
     private JackTokenizer tokenizer;
     private String outputPath;
+    private SymbolTable symbolTable;
+    private VMWriter vmWriter;
     private StringBuilder xmlBuilder;
     private int indentLevel;
 
     public CompilationEngine(JackTokenizer inputTokenizer, String outputFilePath) {
         this.tokenizer = inputTokenizer;
         this.outputPath = outputFilePath;
-        this.xmlBuilder = new StringBuilder();
         this.indentLevel = 0;
+
+        this.symbolTable = new SymbolTable();
+        this.vmWriter = new VMWriter(this.outputPath);
+        this.xmlBuilder = new StringBuilder();
 
         this.tokenizer.advance();
     }
@@ -49,7 +54,10 @@ public class CompilationEngine {
 
         appendXmlIndentedLine("</class>");
 
-        if (!tokenizer.hasMoreTokens()) writeToXmlFile();
+        if (!tokenizer.hasMoreTokens()) {
+            vmWriter.close();
+            writeToXmlFile();
+        }
     }
 
     public void compileClassVarDec() {
@@ -707,11 +715,12 @@ public class CompilationEngine {
 
     private void writeToXmlFile() {
         try {
-            File outputFile = new File(outputPath);
-            if (outputFile.exists()) {
-                outputFile.delete();
+            String xmlOutputhPath = outputPath.replace(".vm", "-Output.xml");
+            File outputXmlFile = new File(xmlOutputhPath);
+            if (outputXmlFile.exists()) {
+                outputXmlFile.delete();
             }
-            FileWriter writer = new FileWriter(outputFile);
+            FileWriter writer = new FileWriter(outputXmlFile);
             writer.write(xmlBuilder.toString());
             writer.flush();
             writer.close();
