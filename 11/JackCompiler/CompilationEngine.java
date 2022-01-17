@@ -1,12 +1,20 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class CompilationEngine {
     private JackTokenizer tokenizer;
     private String outputPath;
+    private String className;
+    private String currentSubroutineName;
+    private Map<UUID, Integer> nargsToSubroutine = new HashMap<>();
+
     private SymbolTable symbolTable;
     private VMWriter vmWriter;
+
     private StringBuilder xmlBuilder;
     private int indentLevel;
 
@@ -32,6 +40,9 @@ public class CompilationEngine {
 
         Token classNameT = eatIdentifier();
         appendXmlIndentedLine(classNameT.xmlRepresentation());
+
+        // VM:
+        this.className = classNameT.getRepresentation();
 
         Token curlyT = eat("{");
         appendXmlIndentedLine(curlyT.xmlRepresentation());
@@ -77,9 +88,14 @@ public class CompilationEngine {
         }
         appendXmlIndentedLine(typeT.xmlRepresentation());
 
-
         Token varNameT = eatIdentifier();
         appendXmlIndentedLine(varNameT.xmlRepresentation());
+
+        // VM:
+        String name = varNameT.getRepresentation();
+        String type = typeT.getRepresentation();
+        VariableKind kind = kindFromRaw(scopeT.getRepresentation());
+        symbolTable.define(name, type, kind);
 
         // Parsing (',' varName)*
         Token nextCommaT, nextVarNameT;
@@ -89,6 +105,10 @@ public class CompilationEngine {
 
             nextVarNameT = eatIdentifier();
             appendXmlIndentedLine(nextVarNameT.xmlRepresentation());
+
+            // VM:
+            name = nextVarNameT.getRepresentation();
+            symbolTable.define(name, type, kind);
         }
 
         Token semicolonT = eat(";");
@@ -102,6 +122,9 @@ public class CompilationEngine {
     public void compileSubroutine() {
         appendXmlIndentedLine("<subroutineDec>");
         this.indentLevel++;
+
+        // VM:
+        symbolTable.startSubroutine();
 
         // compilation logic
 
@@ -122,6 +145,9 @@ public class CompilationEngine {
         // Parsing subroutineName
         Token subroutineNameT = eatIdentifier();
         appendXmlIndentedLine(subroutineNameT.xmlRepresentation());
+
+        // VM:
+        this.currentSubroutineName = subroutineNameT.getRepresentation();
 
         // Parsing '('
         Token openParenT = eat("(");
@@ -146,6 +172,10 @@ public class CompilationEngine {
             while (JackGrammar.startsLocalVariableDeclaration(tokenizer.getCurrent())) {
                 compileVarDec();
             }
+
+            // VM:
+            Integer numberLocalVariables = symbolTable.varCount(VariableKind.VAR);
+            vmWriter.writeFunction(currentSubroutineFullName(), numberLocalVariables);
 
             // Parsing statements
             compileStatements();
@@ -181,6 +211,12 @@ public class CompilationEngine {
             // Parsing varName
             Token varNameT = eatIdentifier();
             appendXmlIndentedLine(varNameT.xmlRepresentation());
+
+            // VM:
+            String name = varNameT.getRepresentation();
+            String type = typeT.getRepresentation();
+            VariableKind kind = VariableKind.ARG;
+            symbolTable.define(name, type, kind);
     
             // Parsing (',' type varName)*
             Token commaT, nextTypeT, nextVarNameT;
@@ -196,6 +232,11 @@ public class CompilationEngine {
     
                 nextVarNameT = eatIdentifier();
                 appendXmlIndentedLine(nextVarNameT.xmlRepresentation());
+
+                // VM:
+                name = nextVarNameT.getRepresentation();
+                type = nextTypeT.getRepresentation();
+                symbolTable.define(name, type, kind);
             }
     
         }
@@ -226,6 +267,12 @@ public class CompilationEngine {
         Token varNameT = eatIdentifier();
         appendXmlIndentedLine(varNameT.xmlRepresentation());
 
+        // VM:
+        String name = varNameT.getRepresentation();
+        String type = typeT.getRepresentation();
+        VariableKind kind = VariableKind.VAR;
+        symbolTable.define(name, type, kind);
+
         // Parsing (',' varName)*
         Token commaT, nextVarNameT;
         while (tokenizer.getCurrent().getRepresentation().equals(",")) {
@@ -234,6 +281,10 @@ public class CompilationEngine {
 
             nextVarNameT = eatIdentifier();
             appendXmlIndentedLine(nextVarNameT.xmlRepresentation());
+
+            // VM:
+            name = nextVarNameT.getRepresentation();
+            symbolTable.define(name, type, kind);
         }
 
         // Parsing ';'
@@ -289,6 +340,10 @@ public class CompilationEngine {
         Token doT = eat("do");
         appendXmlIndentedLine(doT.xmlRepresentation());
 
+        // For VM:
+        UUID id = UUID.randomUUID();
+        nargsToSubroutine.put(id, 0);
+
         // Parsing subroutineCall
         if (isNext("(")) {
             // Parsing the pattern: subroutineName '(' expressionList ')'
@@ -302,7 +357,10 @@ public class CompilationEngine {
             appendXmlIndentedLine(openParenT.xmlRepresentation());
 
             // Parsing expressionList
-            compileExpressionList();
+            compileExpressionList(id);
+
+            // VM:
+            vmWriter.writeCall(this.className + "." + subroutineNameT.getRepresentation(), nargsToSubroutine.get(id));
 
             // Parsing ')'
             Token closeParenT = eat(")");
@@ -315,6 +373,14 @@ public class CompilationEngine {
             // Parsing (className | varName)
             Token nameT = eatIdentifier();
             appendXmlIndentedLine(nameT.xmlRepresentation());
+            String identifierRep = nameT.getRepresentation();
+
+            // For VM:
+            if(identifierIsRecognized(identifierRep)) {
+                // calling a method on the variable, so must push the object to stack first
+                pushVariableOnStack(identifierRep);
+                incrementNargsToSubroutine(id);
+            }
 
             // Parsing '.'
             Token dotT = eat(".");
@@ -329,7 +395,12 @@ public class CompilationEngine {
             appendXmlIndentedLine(openParenT.xmlRepresentation());
 
             // Parsing expressionList
-            compileExpressionList();
+            compileExpressionList(id);
+
+            // VM:
+            String calleeName = nameT.getRepresentation() + "." + subroutineNameT.getRepresentation();
+            Integer nArgs = nargsToSubroutine.get(id);
+            vmWriter.writeCall(calleeName, nArgs);
 
             // Parsing ')'
             Token closeParenT = eat(")");
@@ -340,6 +411,10 @@ public class CompilationEngine {
         // Parsing ';'
         Token semicolonT = eat(";");
         appendXmlIndentedLine(semicolonT.xmlRepresentation());
+
+        // Cleaning up:
+        nargsToSubroutine.remove(id);
+        vmWriter.writePop(Segment.TEMP, 0);
 
         // end of compilation logic
 
@@ -443,13 +518,21 @@ public class CompilationEngine {
         appendXmlIndentedLine(returnT.xmlRepresentation());
 
         // Parsing expression?
-        if (!tokenizer.getCurrent().getRepresentation().equals(";")) {
+        if (tokenizer.getCurrent().getRepresentation().equals(";")) {
+            // If the next token is a semicolon, put "0" on top of stack before returning
+            // VM:
+            vmWriter.writePush(Segment.CONST, 0);
+        } else {
+            // If not, compile the expression to return
             compileExpression();
         }
 
         // Parsing ';'
         Token semicolonT = eat(";");
         appendXmlIndentedLine(semicolonT.xmlRepresentation());
+
+        // VM:
+        vmWriter.writeReturn();
 
         // end of compilation logic
 
@@ -586,6 +669,8 @@ public class CompilationEngine {
             }
             else if (nextRep.equals("(") || nextRep.equals(".")) {
                 // is a subroutine call
+                UUID id = UUID.randomUUID();
+                nargsToSubroutine.put(id, 0);
                 // Parsing subroutineCall
                 if (nextRep.equals("(")) {
                     // Parsing the pattern: subroutineName '(' expressionList ')'
@@ -598,7 +683,7 @@ public class CompilationEngine {
                     appendXmlIndentedLine(openParenT.xmlRepresentation());
 
                     // Parsing expressionList
-                    compileExpressionList();
+                    compileExpressionList(id);
 
                     // Parsing ')'
                     Token closeParenT = eat(")");
@@ -624,7 +709,7 @@ public class CompilationEngine {
                     appendXmlIndentedLine(openParenT.xmlRepresentation());
 
                     // Parsing expressionList
-                    compileExpressionList();
+                    compileExpressionList(id);
 
                     // Parsing ')'
                     Token closeParenT = eat(")");
@@ -645,7 +730,7 @@ public class CompilationEngine {
         appendXmlIndentedLine("</term>");
     }
 
-    public void compileExpressionList() {
+    public void compileExpressionList(UUID callerId) {
         // Assumption: expressionList only comes before a closing paren,
         //   only way I could think of to check if there is at least one expression
 
@@ -655,12 +740,14 @@ public class CompilationEngine {
         // Pattern: (expression (',' expression)* )?
         // compilation logic
         if (!tokenizer.getCurrent().getRepresentation().equals(")")) {  // <- assumption
+            incrementNargsToSubroutine(callerId);
             compileExpression();
 
             while (tokenizer.getCurrent().getRepresentation().equals(",")) {
                 Token commaT = eat(",");
                 appendXmlIndentedLine(commaT.xmlRepresentation());
 
+                incrementNargsToSubroutine(callerId);
                 compileExpression();
             }
         }
@@ -727,6 +814,65 @@ public class CompilationEngine {
         } catch (IOException e) {
             throw new RuntimeException("Could not write analyzed xml, for output file: " + outputPath);
         }
+    }
+
+    private VariableKind kindFromRaw(String raw) {
+        VariableKind kind = null;
+
+        switch(raw) {
+            case "static":
+                kind = VariableKind.STATIC;
+                break;
+            case "field":
+                kind = VariableKind.FIELD;
+                break;
+            default:
+                throw new RuntimeException("Variable kind not recognized: " + raw);
+        }
+
+        return kind;
+    }
+
+    private String currentSubroutineFullName() {
+        return this.className + "." + this.currentSubroutineName;
+    }
+
+    private void incrementNargsToSubroutine(UUID id) {
+        nargsToSubroutine.put(id, nargsToSubroutine.get(id) + 1);
+    }
+
+    private Boolean identifierIsRecognized(String name) {
+        return symbolTable.kindOf(name) != VariableKind.NONE;
+    }
+
+    private Segment kindToSegment(VariableKind kind) {
+        Segment seg = null;
+
+        switch(kind) {
+            case STATIC:
+                seg = Segment.STATIC;
+                break;
+            case FIELD:
+                seg = Segment.THIS;
+                break;
+            case ARG:
+                seg = Segment.ARG;
+                break;
+            case VAR:
+                seg = Segment.LOCAL;
+                break;
+            default:
+                throw new RuntimeException("Impossible to get segment for variable kind: '" + kind.toString() + "'");
+        }
+
+        return seg;
+    }
+
+    private void pushVariableOnStack(String variable) {
+        Integer index = symbolTable.indexOf(variable);
+        VariableKind kind = symbolTable.kindOf(variable);
+        Segment seg = kindToSegment(kind);
+        vmWriter.writePush(seg, index);
     }
 
     
