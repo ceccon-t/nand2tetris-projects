@@ -531,7 +531,7 @@ public class CompilationEngine {
         compileExpression();
 
         // VM:
-        vmWriter.writeArithmetic(VMCommand.NEG);
+        vmWriter.writeArithmetic(VMCommand.NOT);
         vmWriter.writeIf(l2);
 
         // Parsing ')'
@@ -616,7 +616,7 @@ public class CompilationEngine {
         compileExpression();
 
         // VM:
-        vmWriter.writeArithmetic(VMCommand.NEG);
+        vmWriter.writeArithmetic(VMCommand.NOT);
         vmWriter.writeIf(l1);
 
         // Parsing ')'
@@ -684,6 +684,9 @@ public class CompilationEngine {
 
             // Parse term
             compileTerm();
+
+            // VM:
+            writeOpToVMCode(opT.getRepresentation());
         }
 
         // end of compilation logic
@@ -705,11 +708,49 @@ public class CompilationEngine {
             || firstType == TokenTypes.KEYWORD) 
         {
             appendXmlIndentedLine(firstT.xmlRepresentation());
+
+            // VM:
+            if (firstType == TokenTypes.INT_CONST) {
+                Integer rawValue = Integer.valueOf(firstT.getRepresentation());
+                vmWriter.writePush(Segment.CONST, Math.abs(rawValue));
+                if (rawValue < 0) {
+                    vmWriter.writeArithmetic(VMCommand.NEG);  // only way to load a negative constant to VM
+                }
+            }
+            else if (firstType == TokenTypes.STRING_CONST) {
+                String str = firstT.getRepresentation();
+                vmWriter.writePush(Segment.CONST, str.length());
+                vmWriter.writeCall("String.new", 1);
+                for (int i = 0; i < str.length(); i++) {
+                    vmWriter.writePush(Segment.CONST, Character.getNumericValue(str.charAt(i)));
+                    vmWriter.writeCall("String.appendChar", 1);
+                }
+            }
+            else if (firstType == TokenTypes.KEYWORD) {
+                String rep = firstT.getRepresentation();
+                if (rep.equals("true")) {
+                    vmWriter.writePush(Segment.CONST, 1);
+                    vmWriter.writeArithmetic(VMCommand.NEG);
+                } else if (rep.equals("false")) {
+                    vmWriter.writePush(Segment.CONST, 0);
+                } else if (rep.equals("null")) {
+                    vmWriter.writePush(Segment.CONST, 0);
+                } else if (rep.equals("this")) {
+                    vmWriter.writePush(Segment.POINTER, 0);
+                }
+            }
         }
         else if (JackGrammar.isUnaryOp(firstT)) {
             // Pattern: unaryOp term
             appendXmlIndentedLine(firstT.xmlRepresentation());
             compileTerm();
+
+            // VM:
+            if (firstT.getRepresentation().equals("-")) {
+                vmWriter.writeArithmetic(VMCommand.NEG);
+            } else if (firstT.getRepresentation().equals("~")) {
+                vmWriter.writeArithmetic(VMCommand.NOT);
+            }
         }
         else if (firstT.getRepresentation().equals("(")) {
             // Pattern: '(' expression ')'
@@ -728,6 +769,12 @@ public class CompilationEngine {
                 // Pattern: varName '[' expression ']'
                 appendXmlIndentedLine(firstT.xmlRepresentation());
 
+                // VM:
+                String arrName = firstT.getRepresentation();
+                Segment arrSegment = kindToSegment(symbolTable.kindOf(arrName));
+                Integer arrIndex = symbolTable.indexOf(arrName);
+                vmWriter.writePush(arrSegment, arrIndex);
+
                 Token openSquareT = eat("[");
                 appendXmlIndentedLine(openSquareT.xmlRepresentation());
                 
@@ -735,6 +782,11 @@ public class CompilationEngine {
 
                 Token closeSquareT = eat("]");
                 appendXmlIndentedLine(closeSquareT.xmlRepresentation());
+
+                // VM:
+                vmWriter.writeArithmetic(VMCommand.ADD);
+                vmWriter.writePop(Segment.POINTER, 1);
+                vmWriter.writePush(Segment.THAT, 0);
             }
             else if (nextRep.equals("(") || nextRep.equals(".")) {
                 // is a subroutine call
@@ -754,6 +806,9 @@ public class CompilationEngine {
                     // Parsing expressionList
                     compileExpressionList(id);
 
+                    // VM:
+                    vmWriter.writeCall(this.className + "." + firstT.getRepresentation(), nargsToSubroutine.get(id));
+
                     // Parsing ')'
                     Token closeParenT = eat(")");
                     appendXmlIndentedLine(closeParenT.xmlRepresentation());
@@ -764,6 +819,13 @@ public class CompilationEngine {
 
                     // Parsing (className | varName)
                     appendXmlIndentedLine(firstT.xmlRepresentation());
+                    String identifierRep = firstT.getRepresentation();
+
+                    // For VM:
+                    if (identifierIsRecognized(identifierRep)) {
+                        pushVariableOnStack(identifierRep);
+                        incrementNargsToSubroutine(id);
+                    }
 
                     // Parsing '.'
                     Token dotT = eat(".");
@@ -780,16 +842,30 @@ public class CompilationEngine {
                     // Parsing expressionList
                     compileExpressionList(id);
 
+                    // VM:
+                    String calleeName = identifierRep + "." + subroutineNameT.getRepresentation();
+                    Integer nArgs = nargsToSubroutine.get(id);
+                    vmWriter.writeCall(calleeName, nArgs);
+
                     // Parsing ')'
                     Token closeParenT = eat(")");
                     appendXmlIndentedLine(closeParenT.xmlRepresentation());
 
                 }
+
+                // Clearning up:
+                nargsToSubroutine.remove(id);
             }
             else {
                 // is only a variable name
                 // Pattern: varName
                 appendXmlIndentedLine(firstT.xmlRepresentation());
+
+                // VM:
+                String variableName = firstT.getRepresentation();
+                Segment targetSegment = kindToSegment(symbolTable.kindOf(variableName));
+                Integer targetIndex = symbolTable.indexOf(variableName);
+                vmWriter.writePush(targetSegment, targetIndex);
             }
         }
 
@@ -948,6 +1024,28 @@ public class CompilationEngine {
         String label = this.className + "_" + uniqueLabelNumber.toString() + "_" + description;
         uniqueLabelNumber++;
         return label.toUpperCase();
+    }
+
+    private void writeOpToVMCode(String op) {
+        if (op.equals("+")) {
+            vmWriter.writeArithmetic(VMCommand.ADD);
+        } else if (op.equals("-")) {
+            vmWriter.writeArithmetic(VMCommand.SUB);
+        } else if (op.equals("*")) {
+            vmWriter.writeCall("Math.multiply", 2);
+        } else if (op.equals("/")) {
+            vmWriter.writeCall("Math.divide", 2);
+        } else if (op.equals("&")) {
+            vmWriter.writeArithmetic(VMCommand.AND);
+        } else if (op.equals("|")) {
+            vmWriter.writeArithmetic(VMCommand.OR);
+        } else if (op.equals("<")) {
+            vmWriter.writeArithmetic(VMCommand.LT);
+        } else if (op.equals(">")) {
+            vmWriter.writeArithmetic(VMCommand.GT);
+        } else if (op.equals("=")) {
+            vmWriter.writeArithmetic(VMCommand.EQ);
+        }
     }
 
     
