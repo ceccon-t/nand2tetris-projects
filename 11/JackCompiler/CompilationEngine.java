@@ -722,8 +722,8 @@ public class CompilationEngine {
                 vmWriter.writePush(Segment.CONST, str.length());
                 vmWriter.writeCall("String.new", 1);
                 for (int i = 0; i < str.length(); i++) {
-                    vmWriter.writePush(Segment.CONST, Character.getNumericValue(str.charAt(i)));
-                    vmWriter.writeCall("String.appendChar", 1);
+                    vmWriter.writePush(Segment.CONST, (int)str.charAt(i));
+                    vmWriter.writeCall("String.appendChar", 2);
                 }
             }
             else if (firstType == TokenTypes.KEYWORD) {
