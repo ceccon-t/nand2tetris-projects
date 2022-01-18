@@ -436,6 +436,9 @@ public class CompilationEngine {
     public void compileLet() {
         appendXmlIndentedLine("<letStatement>");
         this.indentLevel++;
+        Segment targetSegment;
+        Integer targetIndex;
+        Boolean isIndexingArray = false;
 
         // compilation logic
 
@@ -447,8 +450,16 @@ public class CompilationEngine {
         Token varNameT = eatIdentifier();
         appendXmlIndentedLine(varNameT.xmlRepresentation());
 
+        // For VM:
+        targetSegment = kindToSegment(symbolTable.kindOf(varNameT.getRepresentation()));
+        targetIndex = symbolTable.indexOf(varNameT.getRepresentation());
+
         // Parsing ('[' expression ']')?
         if (tokenizer.getCurrent().getRepresentation().equals("[")) {
+            isIndexingArray = true;
+            // VM:
+            vmWriter.writePush(targetSegment, targetIndex);
+
             // Parsing '['
             Token openSquareT = eat("[");
             appendXmlIndentedLine(openSquareT.xmlRepresentation());
@@ -459,6 +470,9 @@ public class CompilationEngine {
             // Parsing ']'
             Token closeSquareT = eat("]");
             appendXmlIndentedLine(closeSquareT.xmlRepresentation());
+
+            // VM:
+            vmWriter.writeArithmetic(VMCommand.ADD);  // leaves arr[exp] on top of stack
         }
 
         // Parsing '='
@@ -471,6 +485,20 @@ public class CompilationEngine {
         // Parsing ';'
         Token semicolonT = eat(";");
         appendXmlIndentedLine(semicolonT.xmlRepresentation());
+
+        // VM:
+        if (isIndexingArray) {
+            // "General solution for generating array access code"
+            // As shown in video lecture on how to handle arrays
+            vmWriter.writePop(Segment.TEMP, 0);  // save the value of result to be stored
+            vmWriter.writePop(Segment.POINTER, 1); // retrieves arr[exp] from top of stacl onto "THAT"
+            vmWriter.writePush(Segment.TEMP, 0);  // put the result to be stored on top of stack
+
+            // finally store the result onto position arr[exp]
+            targetSegment = Segment.THAT;
+            targetIndex = 0;
+        }
+        vmWriter.writePop(targetSegment, targetIndex);
 
         // end of compilation logic
 

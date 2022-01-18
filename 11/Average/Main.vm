@@ -1,7 +1,18 @@
 function Main.main 4
+pop local 1
+pop local 0
+pop local 2
 label MAIN_0_L1_WHILE
 neg
 if-goto MAIN_1_L2_WHILE
+push local 0
+add
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+pop local 3
+pop local 2
 goto MAIN_0_L1_WHILE
 label MAIN_1_L2_WHILE
 call Output.printString 1
