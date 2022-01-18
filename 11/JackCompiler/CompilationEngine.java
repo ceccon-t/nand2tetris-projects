@@ -179,14 +179,15 @@ public class CompilationEngine {
             vmWriter.writeFunction(currentSubroutineFullName(), numberLocalVariables);
             if (subroutineTypeT.getRepresentation().equals("constructor")) {
                 // Allocate memory to object and set the address of the allocated block on "this"
-                vmWriter.writePush(Segment.CONST, numberLocalVariables);
+                Integer numberOfFields = symbolTable.varCount(VariableKind.FIELD);
+                vmWriter.writePush(Segment.CONST, numberOfFields);
                 vmWriter.writeCall("Memory.alloc", 1);
                 vmWriter.writePop(Segment.POINTER, 0);
             } else if (subroutineTypeT.getRepresentation().equals("method")) {
                 // Sets the "this" reference through the 'pointer' virtual segment
                 vmWriter.writePush(Segment.ARG, 0);
                 vmWriter.writePop(Segment.POINTER, 0);
-            }
+            } 
 
             // Parsing statements
             compileStatements();
@@ -367,6 +368,10 @@ public class CompilationEngine {
             Token openParenT = eat("(");
             appendXmlIndentedLine(openParenT.xmlRepresentation());
 
+            // VM:
+            vmWriter.writePush(Segment.POINTER, 0);
+            incrementNargsToSubroutine(id);
+
             // Parsing expressionList
             compileExpressionList(id);
 
@@ -385,12 +390,15 @@ public class CompilationEngine {
             Token nameT = eatIdentifier();
             appendXmlIndentedLine(nameT.xmlRepresentation());
             String identifierRep = nameT.getRepresentation();
+            String subroutineNamespace = nameT.getRepresentation();
 
             // For VM:
             if(identifierIsRecognized(identifierRep)) {
                 // calling a method on the variable, so must push the object to stack first
                 pushVariableOnStack(identifierRep);
                 incrementNargsToSubroutine(id);
+                // calling method on variable, so need to get the Class name in order to compose VM call
+                subroutineNamespace = symbolTable.typeOf(identifierRep);  
             }
 
             // Parsing '.'
@@ -409,7 +417,7 @@ public class CompilationEngine {
             compileExpressionList(id);
 
             // VM:
-            String calleeName = nameT.getRepresentation() + "." + subroutineNameT.getRepresentation();
+            String calleeName = subroutineNamespace + "." + subroutineNameT.getRepresentation();
             Integer nArgs = nargsToSubroutine.get(id);
             vmWriter.writeCall(calleeName, nArgs);
 
@@ -803,6 +811,10 @@ public class CompilationEngine {
                     Token openParenT = eat("(");
                     appendXmlIndentedLine(openParenT.xmlRepresentation());
 
+                    // VM:
+                    vmWriter.writePush(Segment.POINTER, 0);
+                    incrementNargsToSubroutine(id);
+
                     // Parsing expressionList
                     compileExpressionList(id);
 
@@ -820,11 +832,14 @@ public class CompilationEngine {
                     // Parsing (className | varName)
                     appendXmlIndentedLine(firstT.xmlRepresentation());
                     String identifierRep = firstT.getRepresentation();
+                    String subroutineNamespace = firstT.getRepresentation();
 
                     // For VM:
                     if (identifierIsRecognized(identifierRep)) {
                         pushVariableOnStack(identifierRep);
                         incrementNargsToSubroutine(id);
+                        // Same case as in compileDo, check comment there (oh, the joys of code duplication :/ )
+                        subroutineNamespace = symbolTable.typeOf(identifierRep);
                     }
 
                     // Parsing '.'
@@ -843,7 +858,7 @@ public class CompilationEngine {
                     compileExpressionList(id);
 
                     // VM:
-                    String calleeName = identifierRep + "." + subroutineNameT.getRepresentation();
+                    String calleeName = subroutineNamespace + "." + subroutineNameT.getRepresentation();
                     Integer nArgs = nargsToSubroutine.get(id);
                     vmWriter.writeCall(calleeName, nArgs);
 
