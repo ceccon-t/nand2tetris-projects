@@ -177,6 +177,16 @@ public class CompilationEngine {
             // VM:
             Integer numberLocalVariables = symbolTable.varCount(VariableKind.VAR);
             vmWriter.writeFunction(currentSubroutineFullName(), numberLocalVariables);
+            if (subroutineTypeT.getRepresentation().equals("constructor")) {
+                // Allocate memory to object and set the address of the allocated block on "this"
+                vmWriter.writePush(Segment.CONST, numberLocalVariables);
+                vmWriter.writeCall("Memory.alloc", 1);
+                vmWriter.writePop(Segment.POINTER, 0);
+            } else if (subroutineTypeT.getRepresentation().equals("method")) {
+                // Sets the "this" reference through the 'pointer' virtual segment
+                vmWriter.writePush(Segment.ARG, 0);
+                vmWriter.writePop(Segment.POINTER, 0);
+            }
 
             // Parsing statements
             compileStatements();
