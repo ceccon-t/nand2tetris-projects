@@ -19,6 +19,9 @@ public class CompilationEngine {
     private StringBuilder xmlBuilder;
     private int indentLevel;
 
+    // TODO: Change this to a cli flag
+    private Boolean shouldOutputXmlFile = false;
+
     public CompilationEngine(JackTokenizer inputTokenizer, String outputFilePath) {
         this.tokenizer = inputTokenizer;
         this.outputPath = outputFilePath;
@@ -961,6 +964,8 @@ public class CompilationEngine {
     }
 
     private void writeToXmlFile() {
+        if (!shouldOutputXmlFile) return;
+        
         try {
             String xmlOutputhPath = outputPath.replace(".vm", "-Output.xml");
             File outputXmlFile = new File(xmlOutputhPath);
