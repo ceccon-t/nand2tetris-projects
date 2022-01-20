@@ -1,0 +1,49 @@
+function Math.init 0
+push constant 0
+return
+function Math.abs 0
+push argument 0
+push constant 0
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 0
+neg
+return
+label IF_FALSE0
+push argument 0
+return
+function Math.multiply 0
+push constant 0
+return
+function Math.divide 0
+push constant 0
+return
+function Math.sqrt 0
+push constant 0
+return
+function Math.max 0
+push argument 1
+push argument 0
+gt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 1
+return
+label IF_FALSE0
+push argument 0
+return
+function Math.min 0
+push argument 1
+push argument 0
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 1
+return
+label IF_FALSE0
+push argument 0
+return
