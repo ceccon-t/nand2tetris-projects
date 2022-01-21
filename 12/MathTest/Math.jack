@@ -8,10 +8,28 @@
  * Note: Jack compilers implement multiplication and division using OS method calls.
  */
 class Math {
+    static Array twoToThe;
 
     /** Initializes the library. */
     function void init() {
-        // TODO: Implement
+        let twoToThe = Array.new(16);
+        let twoToThe[0] 	= 	1;	    // 0000000000000001
+        let twoToThe[1] 	= 	2;	    // 0000000000000010
+        let twoToThe[2] 	= 	4;	    // 0000000000000100
+        let twoToThe[3] 	= 	8;	    // 0000000000001000
+        let twoToThe[4] 	= 	16;	    // 0000000000010000
+        let twoToThe[5] 	= 	32;	    // 0000000000100000
+        let twoToThe[6] 	= 	64;	    // 0000000001000000
+        let twoToThe[7] 	= 	128;	// 0000000010000000
+        let twoToThe[8] 	= 	256;	// 0000000100000000
+        let twoToThe[9] 	= 	512;	// 0000001000000000
+        let twoToThe[10] 	= 	1024;	// 0000010000000000
+        let twoToThe[11] 	= 	2048;	// 0000100000000000
+        let twoToThe[12] 	= 	4096;	// 0001000000000000
+        let twoToThe[13] 	= 	8192;	// 0010000000000000
+        let twoToThe[14] 	= 	16384;	// 0100000000000000
+        let twoToThe[15] 	= 	-32767;	// 1000000000000000
+
         return;
     }
 
@@ -29,8 +47,21 @@ class Math {
      *  the Jack expressions x*y and multiply(x,y) return the same value.
      */
     function int multiply(int x, int y) {
-        // TODO: Implement
-        return 0;
+        var int sum, shiftedX, j;
+        let sum = 0;
+        let shiftedX = x;
+        let j = 0;
+
+        while (j < 16) {
+            if (Math.jthOf(j, y) = 1) {
+                let sum = sum + shiftedX;
+            }
+            let shiftedX = shiftedX + shiftedX;
+
+            let j = j + 1;
+        }
+
+        return sum;
     }
 
     /** Returns the integer part of x/y.
@@ -39,14 +70,43 @@ class Math {
      *  the Jack expressions x/y and divide(x,y) return the same value.
      */
     function int divide(int x, int y) {
-        // TODO: Implement
-        return 0;
+        // Unoptimized, as the optimized version presented kept resulting in stack overflows...
+        var int count, current;
+        var boolean negativeX, negativeY;
+        let negativeX = x < 0;
+        let negativeY = y < 0;
+        let x = Math.abs(x);
+        let y = Math.abs(y);
+        if (y > x) {
+            return 0;
+        }
+        let current = x;
+        let count = 0;
+        while (current > 0) {
+            let current = current - y;
+            let count = count + 1;
+        }
+        if (~(negativeX = negativeY)) {
+            let count = -count;
+        }
+        return count;
     }
 
     /** Returns the integer part of the square root of x. */
     function int sqrt(int x) {
-        // TODO: Implement
-        return 0;
+        var int y, j, termA, termB;
+        let y = 0;
+        let j = 7;
+
+        while (~(j < 0)) {
+            let termA = y + twoToThe[j];
+            let termB = termA * termA;
+            if ( ~(termB > x) & ~(termB < 0) ) {
+                let y = termA;
+            }
+            let j = j - 1;
+        }
+        return y;
     }
 
     /** Returns the greater number. */
@@ -63,5 +123,18 @@ class Math {
             return b;
         }
         return a;
+    }
+
+    /** Helper function, returns the bit at the j-th position of the binary representation of a number */
+    function int jthOf(int j, int x) {
+        var int b;
+        let b = 1;
+
+        if ((twoToThe[j] & x) = 0) {
+            let b = 0;
+        }
+
+        return b;
+
     }
 }
